@@ -1,1 +1,1 @@
-# Practicas Laboratorio
+# Practicas Laboratorio y Teoría
