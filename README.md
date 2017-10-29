@@ -1,2 +1,2 @@
-# Practica1-M-
+# Practicas Laboratorio
 Microcomputadoras
