@@ -1,2 +1,1 @@
 # Practicas Laboratorio
-Microcomputadoras
