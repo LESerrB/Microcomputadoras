@@ -1,0 +1,575 @@
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001         processor 16f877
+                      00002         include <p16f877.inc>
+                      00001         LIST
+                      00002 ; P16F877.INC  Standard Header File, Version 1.00    Microchip Technology, Inc.
+Message[301]: MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+                      00373         LIST
+                      00003 
+0000                  00004         org 0
+0000   2805           00005         goto INICIO
+0005                  00006         org 5
+                      00007 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CONFIGURA REGISTROS;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  00000021            00008 valor1          equ h'21'
+  000000FF            00009 cte1            equ h'FF'               ; PRIMER CONTADOR
+                      00010 
+  00000034            00011 valor2          equ h'34'               ; SEGUNDO CONTADOR
+  000000FF            00012 cte2            equ h'FF'
+                      00013 
+  00000035            00014 valor3          equ h'35'
+  00000008            00015 cte3            equ h'08'               ; PRIMER CONTADOR
+                      00016 
+  00000022            00017 comp            equ H'22'
+  00000023            00018 clave           equ H'23'               ; CLAVE DE EQUIPO "6E"
+  00000024            00019 resu            equ H'24'
+  00000026            00020 Nibble          equ     H'26'           ; AUX PARA SWAP
+  00000025            00021 NUM                     equ H'25'
+  00000027            00022 check           equ H'27'               ; CHECA CUANTAS VECES SE HA PRESIONADO LOS BOTONES 
+                      00023 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CONFIGURA PUERTOS;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0005                  00024 INICIO:
+0005   0185           00025         clrf    PORTA
+0006   1683           00026         bsf     STATUS,RP0              ; CAMBIAMOS AL BANCO 1
+0007   1303           00027         bcf     STATUS,RP1
+                      00028 
+0008   3006           00029         movlw   H'06'                   ; PUERTOS "A" Y "E" COMO DIGITALES
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0009   009F           00030         movwf   ADCON1
+                      00031         
+000A   303F           00032         movlw   H'3F'                   ; PUERTO "A" COMO ENTRADA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   0085           00033         movwf   TRISA
+                      00034 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000C   0186           00035         clrf    TRISB
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000D   0188           00036         clrf    TRISD                   ; PUERTO "D" COMO SALIDA (CONTROL DE LOS DISPLAYS)
+                      00037 
+000E   1283           00038         bcf     STATUS,RP0              ; REGRESA AL BANCO 0
+                      00039 
+000F   01A4           00040         clrf    resu                    ; LIMPIA LOS REGISTROS A USAR
+0010   01A7           00041         clrf    check
+                      00042 
+0011   306E           00043         movlw   H'6E'                   ; CLAVE DE EQUIPO
+0012   00A3           00044         movwf   clave
+                      00045 
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0013   0823           00046         movf    clave,w
+0014   00A5           00047         movwf   NUM
+                      00048 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INICIA PROGRAMA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0015                  00049 LOOP:
+0015   0825           00050         movf    NUM,w
+0016   00A4           00051         movwf   resu
+0017   204A           00052         call    Disp1
+                      00053 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;SELCTOR;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0018                  00054 SELECT
+0018   1805           00055         btfsc   PORTA,0
+0019   281B           00056         goto    SELECT1         ; 1
+001A   282E           00057         goto    SWAP_NUMS       ; 0
+                      00058 
+001B                  00059 SELECT1 
+001B   1885           00060         btfsc   PORTA,1
+001C   281E           00061         goto    SELECT2         ; 1
+001D   2831           00062         goto    RESET_0         ; 0
+                      00063 
+001E                  00064 SELECT2 
+001E   1905           00065         btfsc   PORTA,2
+001F   2821           00066         goto    SELECT3         ; 1
+0020   2827           00067         goto    CHECK           ; 0
+                      00068 
+0021                  00069 SELECT3 
+0021   1985           00070         btfsc   PORTA,3
+0022   2824           00071         goto    SELECT4         ; 1
+0023   2844           00072         goto    INCRASE         ; 0
+                      00073 
+0024                  00074 SELECT4 
+0024   1A05           00075         btfsc   PORTA,4
+0025   2815           00076         goto    LOOP            ; 1
+0026   2847           00077         goto    DECREMENT       ; 0
+                      00078 
+0027                  00079 CHECK
+0027   1C27           00080         btfss   check,0
+0028   2034           00081         call    BLINKING        ; 0
+0029   2815           00082         goto    LOOP            ; 1
+                      00083         
+002A                  00084 PRESS2
+002A   1C27           00085         btfss   check,0
+002B   2815           00086         goto    LOOP
+002C   2834           00087         goto    BLINKING
+002D   2815           00088         goto    LOOP
+                      00089 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;FUNCIONES;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+002E                  00090 SWAP_NUMS
+002E   2062           00091         call    retardo
+Message[305]: Using default destination of 1 (file).
+002F   0EA5           00092         swapf   NUM
+0030   2815           00093         goto    LOOP
+0031                  00094 RESET_0
+0031   3000           00095         movlw   H'00'
+0032   00A5           00096         movwf   NUM
+0033   2815           00097         goto    LOOP
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0034                  00098 BLINKING
+0034   0186           00099         clrf    PORTB
+0035   2062           00100         call    retardo
+0036   2062           00101         call    retardo
+0037   2062           00102         call    retardo
+0038   2062           00103         call    retardo
+0039   0825           00104         movf    NUM,w
+003A   00A4           00105         movwf   resu
+003B   204A           00106         call    Disp1   
+003C   2062           00107         call    retardo
+003D   2062           00108         call    retardo
+003E   2062           00109         call    retardo
+003F   2062           00110         call    retardo
+0040   1905           00111         btfsc   PORTA,2
+0041   2834           00112         goto    BLINKING        ; 1
+0042   1427           00113         bsf             check,0         ; 0
+0043   2827           00114         goto    CHECK
+0044                  00115 INCRASE
+0044   2062           00116         call    retardo
+Message[305]: Using default destination of 1 (file).
+0045   0AA5           00117         incf    NUM
+0046   2815           00118         goto    LOOP
+0047                  00119 DECREMENT
+0047   2062           00120         call    retardo
+Message[305]: Using default destination of 1 (file).
+0048   03A5           00121         decf    NUM
+0049   2815           00122         goto    LOOP
+                      00123 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;DISPLAY 1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+004A                  00124 Disp1:
+004A   0188           00125         CLRF    PORTD
+004B   1408           00126         BSF             PORTD,0                 ; ACTIVA DISPLAY 1
+004C   0824           00127         MOVF    resu,W
+004D   390F           00128         andlw   H'0F'                   ; ENMASCARADO DE NIBLE BAJO PARA EVITAR DESBORDAMIENTOS
+004E   2074           00129         call    Tabla
+004F   00A2           00130         MOVWF   comp
+0050   0922           00131         comf    comp,W
+0051   0086           00132         MOVWF   PORTB
+0052   206F           00133         CALL    retardo2
+0053   1008           00134         BCF             PORTD,0                 ; DESACTIVA DISPLAY 1
+                      00135 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;DISPLAY 2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0054                  00136 Disp2:
+0054   0188           00137         CLRF    PORTD   
+0055   1488           00138         BSF             PORTD,1                 ; ACTIVA DISPLAY 2
+0056   0824           00139         MOVF    resu,W
+0057   39F0           00140         andlw   H'F0'                   ; ENMASCARADO DE NIBLE ALTO PARA EVITAR DESBORDAMIENTOS
+0058   00A6           00141         MOVWF   Nibble
+Message[305]: Using default destination of 1 (file).
+0059   0EA6           00142         SWAPF   Nibble
+005A   0826           00143         MOVF    Nibble,W
+005B   2074           00144         call    Tabla
+005C   00A2           00145         MOVWF   comp
+005D   0922           00146         comf    comp,W
+005E   0086           00147         MOVWF   PORTB
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+005F   206F           00148         CALL    retardo2
+0060   0188           00149         CLRF    PORTD                   ; DESACTIVA DISPLAY 2
+0061   0008           00150         return
+                      00151 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;RETARDO 1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0062                  00152 retardo
+0062   30FF           00153         movlw   cte1
+0063   00A1           00154         movwf   valor1
+0064                  00155 tres
+0064   30FF           00156         movlw   cte2
+0065   00B4           00157         movwf   valor2
+0066                  00158 dos
+0066   3008           00159         movlw   cte3
+0067   00B5           00160         movwf   valor3
+0068                  00161 uno 
+Message[305]: Using default destination of 1 (file).
+0068   0BB5           00162         decfsz  valor3
+0069   2868           00163         goto    uno
+Message[305]: Using default destination of 1 (file).
+006A   0BB4           00164         decfsz  valor2
+006B   2866           00165         goto    dos
+Message[305]: Using default destination of 1 (file).
+006C   0BA1           00166         decfsz  valor1
+006D   2864           00167         goto    tres
+006E   0008           00168         return
+                      00169 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;RETARDO 2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+006F                  00170 retardo2 
+006F   30FF           00171         movlw   cte2
+0070   00B4           00172         movwf   valor2
+0071                  00173 tres2
+Message[305]: Using default destination of 1 (file).
+0071   0BB4           00174         decfsz  valor2
+0072   2871           00175         goto    tres2
+0073   0008           00176         return
+                      00177 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;TABLA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0074                  00178 Tabla:
+0074   0782           00179         addwf   PCL,1
+                      00180                         ; hgfedcba
+0075   34C0           00181         retlw   B'11000000'             ; '00'
+0076   34F9           00182         retlw   B'11111001'             ; '01'
+0077   34A4           00183         retlw   B'10100100'             ; '02'
+0078   34B0           00184         retlw   B'10110000'             ; '03'
+0079   3499           00185         retlw   B'10011001'             ; '04'
+007A   3492           00186         retlw   B'10010010'             ; '05'
+007B   3482           00187         retlw   B'10000010'             ; '06'
+007C   34F8           00188         retlw   B'11111000'             ; '07'
+007D   3480           00189         retlw   B'10000000'             ; '08'
+007E   3490           00190         retlw   B'10010000'             ; '09'
+007F   3488           00191         retlw   B'10001000'             ; '0A'
+0080   3483           00192         retlw   B'10000011'             ; '0B'
+0081   34C6           00193         retlw   B'11000110'             ; '0C'
+0082   34A1           00194         retlw   B'10100001'             ; '0D'
+0083   3486           00195         retlw   B'10000110'             ; '0E'
+0084   348E           00196         retlw   B'10001110'             ; '0F'
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00197 
+0085   0008           00198         return
+                      00199         end
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BLINKING                          00000034
+BRGH                              00000002
+C                                 00000000
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHECK                             00000027
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CKE                               00000006
+CKP                               00000004
+CREN                              00000004
+CSRC                              00000007
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DECREMENT                         00000047
+D_A                               00000005
+Disp1                             0000004A
+Disp2                             00000054
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INCRASE                           00000044
+INDF                              00000000
+INICIO                            00000005
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+LOOP                              00000015
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+NUM                               00000025
+Nibble                            00000026
+OBF                               00000006
+OERR                              00000001
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+PRESS2                            0000002A
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RBIE                              00000003
+RBIF                              00000000
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READ_WRITE                        00000002
+RESET_0                           00000031
+RP0                               00000005
+RP1                               00000006
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+R_W                               00000002
+S                                 00000003
+SELECT                            00000018
+SELECT1                           0000001B
+SELECT2                           0000001E
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SELECT3                           00000021
+SELECT4                           00000024
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+SWAP_NUMS                         0000002E
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISB                             00000086
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+Tabla                             00000074
+UA                                00000001
+W                                 00000000
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00000FCF
+_CP_HALF                          00001FDF
+_CP_OFF                           00003FFF
+_CP_UPPER_256                     00002FEF
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_ENABLE_OFF                   00003DFF
+_WRT_ENABLE_ON                    00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+check                             00000027
+clave                             00000023
+comp                              00000022
+cte1                              000000FF
+cte2                              000000FF
+cte3                              00000008
+MPASM  5.35beta                    PRACTICA_3.ASM   10-25-2017  11:07:24         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+dos                               00000066
+resu                              00000024
+retardo                           00000062
+retardo2                          0000006F
+tres                              00000064
+tres2                             00000071
+uno                               00000068
+valor1                            00000021
+valor2                            00000034
+valor3                            00000035
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X----XXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXX---------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   130
+Program Memory Words Free:  8062
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :    13 reported,     0 suppressed
+
+

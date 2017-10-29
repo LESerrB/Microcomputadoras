@@ -1,0 +1,46 @@
+MPLINK 4.35, Linker
+Linker Map File - Created Sun Oct 01 19:39:55 2017
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000005    program   0x000032
+  .config_2007_BLINKING.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000005    0x00001d      
+                            0x002007    0x002007      
+            27 out of 8453 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                      dos   0x000015    program     static D:\Practica1\Blinking.asm
+                   inicio   0x000005    program     static D:\Practica1\Blinking.asm
+                    loop2   0x00000a    program     static D:\Practica1\Blinking.asm
+                  retardo   0x000011    program     static D:\Practica1\Blinking.asm
+                     tres   0x000013    program     static D:\Practica1\Blinking.asm
+                      uno   0x000017    program     static D:\Practica1\Blinking.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   inicio   0x000005    program     static D:\Practica1\Blinking.asm
+                    loop2   0x00000a    program     static D:\Practica1\Blinking.asm
+                  retardo   0x000011    program     static D:\Practica1\Blinking.asm
+                     tres   0x000013    program     static D:\Practica1\Blinking.asm
+                      dos   0x000015    program     static D:\Practica1\Blinking.asm
+                      uno   0x000017    program     static D:\Practica1\Blinking.asm
+
+

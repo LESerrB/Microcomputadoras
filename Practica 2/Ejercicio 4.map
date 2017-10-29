@@ -1,0 +1,46 @@
+MPLINK 4.35, Linker
+Linker Map File - Created Sat Oct 28 18:24:17 2017
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000005    program   0x000038
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000005    0x000020      
+            29 out of 8453 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+              corrimiento   0x00000d    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                      dos   0x000018    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                   inicio   0x000005    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                     loop   0x00000b    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                  retardo   0x000014    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                     tres   0x000016    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                      uno   0x00001a    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   inicio   0x000005    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                     loop   0x00000b    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+              corrimiento   0x00000d    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                  retardo   0x000014    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                     tres   0x000016    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                      dos   0x000018    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+                      uno   0x00001a    program     static D:\Microcomputadoras\Practica 2\Ejercicio 4.asm
+
+

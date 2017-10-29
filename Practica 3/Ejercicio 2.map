@@ -1,0 +1,72 @@
+MPLINK 4.35, Linker
+Linker Map File - Created Sat Oct 28 18:27:02 2017
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000005    program   0x000098
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000005    0x000050      
+            77 out of 8453 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    CICLO   0x00001d    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_A   0x000031    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_D   0x000023    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_I   0x00002a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      ENC   0x000020    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    FLASH   0x00003d    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   INICIO   0x000005    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP0   0x000025    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP1   0x00002c    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP2   0x000033    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP3   0x000038    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      dos   0x000048    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  retardo   0x000044    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   select   0x00000e    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select1   0x000011    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select2   0x000014    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select3   0x000017    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select4   0x00001a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                     tres   0x000046    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      uno   0x00004a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   INICIO   0x000005    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   select   0x00000e    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select1   0x000011    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select2   0x000014    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select3   0x000017    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  select4   0x00001a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    CICLO   0x00001d    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      ENC   0x000020    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_D   0x000023    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP0   0x000025    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_I   0x00002a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP1   0x00002c    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                   CORR_A   0x000031    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP2   0x000033    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    LOOP3   0x000038    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                    FLASH   0x00003d    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                  retardo   0x000044    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                     tres   0x000046    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      dos   0x000048    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+                      uno   0x00004a    program     static D:\Microcomputadoras\Practica 3\Ejercicio 2.asm
+
+
