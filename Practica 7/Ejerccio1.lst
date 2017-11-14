@@ -1,0 +1,537 @@
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[205]: Found directive in column 1. (processor)
+                      00001 processor 16f877
+                      00002   include<p16f877.inc>
+                      00001         LIST
+                      00002 ; P16F877.INC  Standard Header File, Version 1.00    Microchip Technology, Inc.
+Message[301]: MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+                      00373         LIST
+                      00003 
+                      00004   ;Variables para el DELAY
+  00000021            00005 valor1 equ h'21'
+  00000022            00006 valor2 equ h'22'
+  00000023            00007 valor3 equ h'23'
+                      00008   ;Variables para valores 
+  00000024            00009 v0 equ h'24'
+  00000025            00010 v1 equ h'25'
+  00000026            00011 v2 equ h'26'
+  00000027            00012 v3 equ h'27'
+  00000029            00013 v4 equ h'29'
+  00000030            00014 v5 equ h'30'
+                      00015 
+0000                  00016   org 0h
+0000   2805           00017   goto INICIO
+0005                  00018   org 05h
+                      00019 
+0005                  00020 INICIO: 
+0005   0186           00021        clrf PORTB        ;Limpia el puerto B
+0006   1683           00022        bsf STATUS,RP0    
+0007   1303           00023        bcf STATUS,RP1    ;Cambio al Banco 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0008   0186           00024        clrf TRISB        ;Configura el puerto B como salida.
+                      00025 
+                      00026        ;Configuración del registro transmisor
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0009   1518           00027        bsf TXSTA, BRGH   ;Bit de selección de velocidad alta,BRGH=1 
+000A   3081           00028        movlw d'129'      ;Velocidad 9600 baud
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   0099           00029        movwf SPBRG       ;Carga la velocidad de comunicación 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000C   1218           00030        bcf TXSTA, SYNC   ;Comunicación asincrona SYNC=0   
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000D   1698           00031        bsf TXSTA, TXEN   ;Activa la transmisión  
+000E   1283           00032        bcf STATUS, RP0   ;Cambio al Banco 0
+                      00033 
+                      00034        ;Configuración del registro receptor
+000F   1798           00035        bsf RCSTA, SPEN   ;Habilita puerto serie 
+0010   1618           00036        bsf RCSTA, CREN   ;Configura recepción continua en modo
+                      00037                          ;asíncrono
+0011                  00038 RECIBE:
+                      00039        ;Registros Banderas
+0011   1E8C           00040        btfss PIR1, RCIF   ;Verifica si la recepción esta completa 
+0012   2811           00041        goto RECIBE        ;No, sigue poleando(Revisando)
+0013   081A           00042        movf RCREG,w       ;Si,mueve lo que recibe registro de
+                      00043                           ;recepción RCREG a W
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0014                  00044 CICLO:   
+0014   0186           00045        clrf PORTB   
+                      00046            
+                      00047        ;Verifica si la entrada por el puerto B es b"0000"
+0015   3030           00048        movlw '0'         ;Mueve '0' a W
+0016   00A4           00049        movwf v0          ;Mueve el contenido de W a v0, v0=0
+0017   081A           00050        movfw RCREG       ;Mueve el contenido de RCREG a W
+0018   0624           00051        xorwf v0,w        ;Realiza v0 xor W
+0019   1903           00052        btfsc STATUS,Z    ;Verifica si Z=0
+001A   283A           00053        goto APG          ;NO, son iguales
+                      00054                          ;SI, verifica otra opción
+                      00055 
+                      00056        ;Verifica si la entrada por el puerto B es b"0001"
+001B   3031           00057        movlw '1'          
+001C   00A5           00058        movwf v1
+001D   081A           00059        movfw RCREG
+001E   0625           00060        xorwf v1,w
+001F   1903           00061        btfsc STATUS,Z
+0020   283D           00062        goto UNOS
+                      00063 
+                      00064        ;Verifica si la entrada por el puerto B es b"0010"
+0021   3032           00065        movlw '2'
+0022   00A6           00066        movwf v2
+0023   081A           00067        movfw RCREG
+0024   0626           00068        xorwf v2,w
+0025   1903           00069        btfsc STATUS,Z
+0026   2840           00070        goto DER
+                      00071 
+                      00072        ;Verifica si la entrada por el puerto B es b"0011"
+0027   3033           00073        movlw '3'
+0028   00A7           00074        movwf v3
+0029   081A           00075        movfw RCREG
+002A   0627           00076        xorwf v3,w
+002B   1903           00077        btfsc STATUS,Z
+002C   2848           00078        goto  IZQ
+                      00079 
+                      00080        ;Verifica si la entrada por el puerto B es "0100"
+002D   3034           00081        movlw '4'
+002E   00A9           00082        movwf v4
+002F   081A           00083        movfw RCREG
+0030   0629           00084        xorwf v4,w
+0031   1903           00085        btfsc STATUS,Z
+0032   2850           00086        goto DERIZQ
+                      00087 
+                      00088        ;Verifica si la entrada por el puerto B es "0101"
+0033   3035           00089        movlw '5'
+0034   00B0           00090        movwf v5
+0035   081A           00091        movfw RCREG
+0036   0630           00092        xorwf v5,w
+0037   1903           00093        btfsc STATUS,Z
+0038   285F           00094        goto ENCAPG
+0039   2814           00095        goto CICLO
+                      00096 
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00097        ;Todos los bits del puerto B apagados 
+003A                  00098 APG:
+003A   3000           00099        movlw h'00'
+003B   0086           00100        movwf PORTB
+003C   2814           00101        goto CICLO
+                      00102  
+                      00103        ;Todos los bits del puerto B encendidos
+003D                  00104 UNOS: 
+003D   30FF           00105        movlw h'FF'
+003E   0086           00106        movwf PORTB
+003F   2814           00107        goto CICLO
+                      00108            
+                      00109        ;Corrimiento al la Derecha
+0040                  00110 DER:
+0040   3080           00111        movlw h'80'
+0041   0086           00112        movwf PORTB
+0042   2066           00113        call retardo
+                      00114 
+0043                  00115 DER1:
+0043   0C86           00116        rrf PORTB,1
+0044   2066           00117        call retardo
+0045   1C06           00118        btfss PORTB,0
+0046   2843           00119        goto DER1
+0047   2814           00120        goto CICLO
+                      00121        
+                      00122        ;Corrimiento a la Izquierda
+0048                  00123 IZQ: 
+0048   3001           00124        movlw h'01'
+0049   0086           00125        movwf PORTB
+004A   2066           00126        call retardo
+004B                  00127 IZQ1:
+004B   0D86           00128        rlf PORTB,1
+004C   2066           00129        call retardo
+004D   1F86           00130        btfss PORTB,7
+004E   284B           00131        goto IZQ1
+004F   2814           00132        goto CICLO
+                      00133        
+                      00134        ;Corrimiento Derecha-Izquierda
+0050                  00135 DERIZQ:
+0050   3080           00136        movlw h'80'
+0051   0086           00137        movwf PORTB
+0052   2066           00138        call retardo
+0053                  00139 DER2:
+0053   0C86           00140        rrf PORTB,1
+0054   2066           00141        call retardo
+0055   1C06           00142        btfss PORTB,0
+0056   2853           00143        goto DER2
+                      00144 
+0057   3001           00145        movlw h'01'
+0058   0086           00146        movwf PORTB
+0059   2066           00147        call retardo
+005A                  00148 IZQ2:
+005A   0D86           00149        rlf PORTB,1
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+005B   2066           00150        call retardo
+005C   1F86           00151        btfss PORTB,7
+005D   285A           00152        goto IZQ2
+005E   2814           00153        goto CICLO 
+                      00154            
+                      00155        ;Enciende y apaga todos los bits del puerto B
+005F                  00156 ENCAPG: 
+005F   3000           00157        movlw h'00'
+0060   0086           00158        movwf PORTB
+0061   2066           00159        call retardo
+0062   30FF           00160        movlw h'FF'
+0063   0086           00161        movwf PORTB
+0064   2066           00162        call retardo
+0065   2814           00163        goto CICLO 
+                      00164 
+                      00165        ;Rutina que genra un Retardo
+0066                  00166 retardo: 
+0066   3015           00167      movlw 15h       
+0067   00A1           00168          movwf valor1
+0068   3060           00169 tres movlw 60h
+0069   00A2           00170          movwf valor2
+006A   3050           00171 dos  movlw 50h
+006B   00A3           00172          movwf valor3
+Message[305]: Using default destination of 1 (file).
+006C   0BA3           00173 uno  decfsz valor3 
+006D   286C           00174          goto uno 
+Message[305]: Using default destination of 1 (file).
+006E   0BA2           00175          decfsz valor2
+006F   286A           00176          goto dos
+Message[305]: Using default destination of 1 (file).
+0070   0BA1           00177          decfsz valor1   
+0071   2868           00178          goto tres
+0072   0008           00179          return     
+                      00180      end  
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+APG                               0000003A
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BRGH                              00000002
+C                                 00000000
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CICLO                             00000014
+CKE                               00000006
+CKP                               00000004
+CREN                              00000004
+CSRC                              00000007
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DER                               00000040
+DER1                              00000043
+DER2                              00000053
+DERIZQ                            00000050
+D_A                               00000005
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+ENCAPG                            0000005F
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INDF                              00000000
+INICIO                            00000005
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+IZQ                               00000048
+IZQ1                              0000004B
+IZQ2                              0000005A
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OBF                               00000006
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+OERR                              00000001
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RBIE                              00000003
+RBIF                              00000000
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READ_WRITE                        00000002
+RECIBE                            00000011
+RP0                               00000005
+RP1                               00000006
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+R_W                               00000002
+S                                 00000003
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SPEN                              00000007
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRMT                              00000001
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+UNOS                              0000003D
+W                                 00000000
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00000FCF
+_CP_HALF                          00001FDF
+_CP_OFF                           00003FFF
+_CP_UPPER_256                     00002FEF
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_ENABLE_OFF                   00003DFF
+_WRT_ENABLE_ON                    00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+dos                               0000006A
+retardo                           00000066
+tres                              00000068
+uno                               0000006C
+v0                                00000024
+v1                                00000025
+v2                                00000026
+v3                                00000027
+v4                                00000029
+v5                                00000030
+valor1                            00000021
+valor2                            00000022
+MPASM  4.00 Released                                 P7-1.ASM   11-7-2017  14:06:02         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+valor3                            00000023
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X----XXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXX-------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   111
+Program Memory Words Free:  8081
+
+
+Errors   :     0
+Warnings :     1 reported,     0 suppressed
+Messages :     9 reported,     0 suppressed
+
+

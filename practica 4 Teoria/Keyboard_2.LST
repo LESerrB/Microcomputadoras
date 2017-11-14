@@ -1,0 +1,250 @@
+CCS PCM C Compiler, Version 3.184, 22094
+
+               Filename: C:\Users\ChibrasGuillermo\Documents\Luis\UNAM\Microcomputadoras\Teoria\practica4\Keyboard_2.LST
+
+               ROM used: 139 (2%)
+                         Largest free fragment is 2048
+               RAM used: 21 (12%) at main() level
+                         22 (13%) worst case
+               Stack:    2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   019
+0003:  NOP
+....................  /*  
+.................... Keyboard_2.c  
+.................... Por: Carlos Daniel Hernandez Mena  
+.................... 23-Julio_2011  
+....................   
+.................... FUNCIONA MEJOR QUE Keyboard_1.c  
+....................   
+....................   
+.................... Conectando un teclado standard para PC, este  
+.................... programa imprime en los LEDs del puerto B  
+.................... el codigo de la tecla pulsada que NO esta en ASCII  
+....................   
+.................... PORTD(0) = Reloj  
+.................... PORTD(1) = Data  
+....................   
+....................   
+.................... */  
+....................   
+.................... //Encabezados  
+.................... #include <16f877.h> 
+....................  //////// Standard Header file for the PIC16F877 device ////////////////  
+.................... #device PIC16F877  
+.................... #list  
+....................  
+....................   
+.................... #fuses HS,NOPROTECT,  
+.................... #use delay(clock=20000000)  
+0004:  MOVLW  30
+0005:  MOVWF  04
+0006:  MOVF   00,W
+0007:  BTFSC  03.2
+0008:  GOTO   016
+0009:  MOVLW  06
+000A:  MOVWF  78
+000B:  CLRF   77
+000C:  DECFSZ 77,F
+000D:  GOTO   00C
+000E:  DECFSZ 78,F
+000F:  GOTO   00B
+0010:  MOVLW  7B
+0011:  MOVWF  77
+0012:  DECFSZ 77,F
+0013:  GOTO   012
+0014:  DECFSZ 00,F
+0015:  GOTO   009
+0016:  BCF    0A.3
+0017:  BCF    0A.4
+0018:  GOTO   036 (RETURN)
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)  
+.................... #org 0x1F00, 0x1FFF void loader16F877(void) {} //for the 8k 16F876/7  
+*
+1F00:  RETLW  00
+....................   
+.................... //Definiciones  
+....................   
+.................... #byte    PORTB =  0x06  
+.................... #byte    PORTD =  0x08  
+.................... #byte    TRISB =  0x86  
+.................... #byte    TRISD =  0x88  
+....................   
+....................   
+.................... int cont=0;  
+*
+0026:  CLRF   20
+.................... int DATA11[11], DATA;  
+....................   
+....................   
+.................... void main()  
+.................... {  
+*
+0019:  CLRF   04
+001A:  MOVLW  1F
+001B:  ANDWF  03,F
+001C:  MOVLW  06
+001D:  BSF    03.5
+001E:  MOVWF  1F
+001F:  MOVLW  81
+0020:  MOVWF  19
+0021:  MOVLW  26
+0022:  MOVWF  18
+0023:  MOVLW  90
+0024:  BCF    03.5
+0025:  MOVWF  18
+....................    int i=8;  
+*
+0027:  MOVLW  08
+0028:  MOVWF  2D
+....................   
+....................   
+....................    //Bits 0 y 1 del puerto D como entrada  
+....................    bit_set(TRISD,0);  
+0029:  BSF    03.5
+002A:  BSF    08.0
+....................    bit_set(TRISD,1);  
+002B:  BSF    08.1
+....................    //Puerto B como salida  
+....................    set_tris_b(0x00);  
+002C:  MOVLW  00
+002D:  MOVWF  06
+....................   
+....................    //Condicion Inicial  
+....................    //Todos los puertos en 0  
+....................    output_b(0x00);  
+002E:  MOVWF  06
+002F:  BCF    03.5
+0030:  CLRF   06
+....................   
+....................    //Redardo para que todo se estabilice  
+....................    delay_ms(1000);  
+0031:  MOVLW  04
+0032:  MOVWF  2F
+0033:  MOVLW  FA
+0034:  MOVWF  30
+0035:  GOTO   004
+0036:  DECFSZ 2F,F
+0037:  GOTO   033
+....................   
+....................    while(1)  
+....................    {  
+....................   
+....................       while(bit_test(PORTD,0)==1);  
+0038:  MOVLW  00
+0039:  BTFSC  08.0
+003A:  MOVLW  01
+003B:  SUBLW  01
+003C:  BTFSC  03.2
+003D:  GOTO   038
+....................       DATA11[cont++] = bit_test(PORTD,1);  
+003E:  MOVF   20,W
+003F:  INCF   20,F
+0040:  ADDLW  21
+0041:  MOVWF  04
+0042:  MOVLW  00
+0043:  BTFSC  08.1
+0044:  MOVLW  01
+0045:  MOVWF  00
+....................       while(bit_test(PORTD,0)==0);  
+0046:  MOVLW  00
+0047:  BTFSC  08.0
+0048:  MOVLW  01
+0049:  XORLW  00
+004A:  BTFSC  03.2
+004B:  GOTO   046
+....................   
+....................   
+....................       if(cont==11)  
+....................       {  
+004C:  MOVF   20,W
+004D:  SUBLW  0B
+004E:  BTFSS  03.2
+004F:  GOTO   088
+....................          int i;  
+....................          cont=0;  
+0050:  CLRF   20
+....................   
+....................          for(i=1;i<=8;i++)  
+0051:  MOVLW  01
+0052:  MOVWF  2E
+0053:  MOVF   2E,W
+0054:  SUBLW  08
+0055:  BTFSS  03.0
+0056:  GOTO   07E
+....................          {  
+....................             if(DATA11[i]==1)  
+....................                bit_set(DATA,8-i);  
+0057:  MOVLW  21
+0058:  ADDWF  2E,W
+0059:  MOVWF  04
+005A:  DECFSZ 00,W
+005B:  GOTO   06C
+005C:  MOVF   2E,W
+005D:  SUBLW  08
+005E:  MOVWF  2F
+005F:  MOVLW  01
+0060:  MOVWF  77
+0061:  MOVF   2F,W
+0062:  MOVWF  78
+0063:  BTFSC  03.2
+0064:  GOTO   069
+0065:  BCF    03.0
+0066:  RLF    77,F
+0067:  DECFSZ 78,F
+0068:  GOTO   065
+0069:  MOVF   77,W
+006A:  IORWF  2C,F
+....................             else  
+....................                bit_clear(DATA,8-i);  
+006B:  GOTO   07C
+006C:  MOVF   2E,W
+006D:  SUBLW  08
+006E:  MOVWF  2F
+006F:  MOVLW  01
+0070:  MOVWF  77
+0071:  MOVF   2F,W
+0072:  MOVWF  78
+0073:  BTFSC  03.2
+0074:  GOTO   079
+0075:  BCF    03.0
+0076:  RLF    77,F
+0077:  DECFSZ 78,F
+0078:  GOTO   075
+0079:  MOVF   77,W
+007A:  XORLW  FF
+007B:  ANDWF  2C,F
+....................          }  
+007C:  INCF   2E,F
+007D:  GOTO   053
+....................   
+....................          if(DATA!=0x0F)      //Si es diferente del Codigo de Liberacion de Tecla  
+....................             output_b(DATA);  //que SI muestre.  
+007E:  MOVF   2C,W
+007F:  SUBLW  0F
+0080:  BTFSC  03.2
+0081:  GOTO   088
+0082:  MOVLW  00
+0083:  BSF    03.5
+0084:  MOVWF  06
+0085:  BCF    03.5
+0086:  MOVF   2C,W
+0087:  MOVWF  06
+....................   
+....................       }  
+....................   
+....................   
+....................    }//while  
+0088:  GOTO   038
+....................   
+.................... }//main  
+....................   
+....................   
+....................  
+0089:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3FFE   HS WDT NOPUT NOPROTECT BROWNOUT LVP NOCPD NOWRT NODEBUG

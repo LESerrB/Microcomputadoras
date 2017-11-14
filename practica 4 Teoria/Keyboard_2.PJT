@@ -1,0 +1,35 @@
+[PROJECT]
+Target=Keyboard_2.HEX
+Development_Mode=2
+Processor=0x877F
+ToolSuite=CCS
+
+[Directories]
+Include=
+Library=
+LinkerScript=
+
+[Target Data]
+FileList=Keyboard_2.c;
+BuildTool=C-COMPILER
+OptionString=+FM
+AdditionalOptionString=
+BuildRequired=1
+
+[Keyboard_2.c]
+Type=4
+Path=
+FileList=
+BuildTool=
+OptionString=
+AdditionalOptionString=
+
+[mru-list]
+1=C:\Users\CHIBRA~1\DOCUME~1\Luis\UNAM\MICROC~1\Teoria\PRACTI~3\KEYBOA~1.C
+
+[Windows]
+0=0000 C:\Users\CHIBRA~1\DOCUME~1\Luis\UNAM\MICROC~1\Teoria\PRACTI~3\KEYBOA~1.C 0 0 796 451 3 0
+
+[Opened Files]
+1=C:\Users\ChibrasGuillermo\Documents\Luis\UNAM\Microcomputadoras\Teoria\practica4\Keyboard_2.c
+2=
