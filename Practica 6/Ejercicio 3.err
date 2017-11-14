@@ -1,0 +1,5 @@
+Message[301] C:\ARCHIVOS DE PROGRAMA\MICROCHIP\MPASM SUITE\P16F877.INC 37 : MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+Message[302] E:\MICROCOMPUTADORAS\PRACTICA 6\EJERCICIO 3.ASM 28 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] E:\MICROCOMPUTADORAS\PRACTICA 6\EJERCICIO 3.ASM 30 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] E:\MICROCOMPUTADORAS\PRACTICA 6\EJERCICIO 3.ASM 32 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] E:\MICROCOMPUTADORAS\PRACTICA 6\EJERCICIO 3.ASM 90 : Using default destination of 1 (file).
