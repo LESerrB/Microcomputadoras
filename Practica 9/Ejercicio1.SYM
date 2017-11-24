@@ -1,0 +1,81 @@
+008     PSP_DATA
+015     CCP_1_LOW
+015-016 CCP_1
+016     CCP_1_HIGH
+01B-01C CCP_2
+01B     CCP_2_LOW
+01C     CCP_2_HIGH
+020-021 var
+022-023 @ITOF.P1
+022-025 @MULFF.P2
+022     main.@SCRATCH
+023     main.@SCRATCH
+024     main.@SCRATCH
+025     main.@SCRATCH
+026-029 @MULFF.P1
+026     main.@SCRATCH
+027-028 @PRINTF_LU_9600_62_63.P1
+027     main.@SCRATCH
+028     @PRINTF_X_9600_62_63.P1
+028     main.@SCRATCH
+029     @PRINTF_X_9600_62_63.P1
+029-02C @PRINTF_F_9600_62_63.P2
+029     main.@SCRATCH
+029     @PRINTF_LU_9600_62_63.@SCRATCH
+02A     @MULFF.@SCRATCH
+02A     @PRINTF_LU_9600_62_63.@SCRATCH
+02B     @MULFF.@SCRATCH
+02B     @PRINTF_LU_9600_62_63.@SCRATCH
+02C     @MULFF.@SCRATCH
+02C     @PRINTF_LU_9600_62_63.@SCRATCH
+02D-030 @PRINTF_F_9600_62_63.P1
+02D     @MULFF.@SCRATCH
+02D     @PRINTF_LU_9600_62_63.@SCRATCH
+02E     @MULFF.@SCRATCH
+02E     @PRINTF_LU_9600_62_63.@SCRATCH
+031     @PRINTF_F_9600_62_63.@SCRATCH
+032     @PRINTF_F_9600_62_63.@SCRATCH
+033     @PRINTF_F_9600_62_63.@SCRATCH
+034     @PRINTF_F_9600_62_63.@SCRATCH
+035     @PRINTF_F_9600_62_63.@SCRATCH
+036     @PRINTF_F_9600_62_63.@SCRATCH
+037     @PRINTF_F_9600_62_63.@SCRATCH
+038     @PRINTF_F_9600_62_63.@SCRATCH
+039     @PRINTF_F_9600_62_63.@SCRATCH
+03A     @PRINTF_F_9600_62_63.@SCRATCH
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+07B     @SCRATCH
+
+1F00  loader16F877
+02CB  main
+0004  @const10029
+0032  @ITOF
+0052  @MULFF
+00CB  @PRINTF_LU_9600_62_63
+0125  @PRINTF_X_9600_62_63
+0148  @PRINTF_F_9600_62_63
+02CB  @cinit
+
+Project Files:
+    C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.c
+    C:\Archivos de programa\PICC\devices\16f877.h
+
+Compiler Settings:
+    Processor:      PIC16F877
+    Pointer Size:   8
+    ADC Range:      0-1023
+    Opt Level:      9
+    Short,Int,Long: 1,8,16
+
+Output Files:
+    Errors:      C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.err
+    INHX8:       C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.HEX
+    Symbols:     C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.SYM
+    List:        C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.LST
+    Debug/COFF:  C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.cof
+    Call Tree:   C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.tre
+    Statistics:  C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.sta

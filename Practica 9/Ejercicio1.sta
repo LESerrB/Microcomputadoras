@@ -1,0 +1,37 @@
+
+ROM used: 885 (11%)
+          2048 (25%) including unused fragments
+
+          3 Average locations per line
+          88 Average locations per statement
+
+RAM used: 15 (9%) at main() level
+          32 (18%) worst case
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   26    10 100  C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.c
+  259     0   0  C:\Archivos de programa\PICC\devices\16f877.h
+----- -----
+  570    20 Total
+
+Page ROM  %  RAM  Functions:
+---- --- --- ---  ----------
+3      1   0   0  loader16F877
+0    169  19   8  main
+0     46   5   0  @const10029
+0     32   4   2  @ITOF
+0    121  14  13  @MULFF
+0     90  10   8  @PRINTF_LU_9600_62_63
+0     35   4   2  @PRINTF_X_9600_62_63
+0    387  44  18  @PRINTF_F_9600_62_63
+
+ Segment   Used  Free
+---------  ----  ----
+00000-00003     4  0
+00004-007FF   880  1164
+00800-00FFF     0  2048
+01000-017FF     0  2048
+01800-01EFF     0  1792
+01F00-01FFF     1  255
+

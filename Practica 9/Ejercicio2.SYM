@@ -1,0 +1,100 @@
+008     PSP_DATA
+015     CCP_1_LOW
+015-016 CCP_1
+016     CCP_1_HIGH
+01B-01C CCP_2
+01B     CCP_2_LOW
+01C     CCP_2_HIGH
+020     @INTERRUPT_AREA
+021     @INTERRUPT_AREA
+022     @INTERRUPT_AREA
+023     @INTERRUPT_AREA
+024     @INTERRUPT_AREA
+025     @INTERRUPT_AREA
+026     @INTERRUPT_AREA
+027     @INTERRUPT_AREA
+028-029 var
+02A-02B contador
+02C-02D @ITOF.P1
+02C-02F @MULFF.P2
+02C     clock_isr.@SCRATCH
+02D     clock_isr.@SCRATCH
+02E     clock_isr.@SCRATCH
+02F     clock_isr.@SCRATCH
+030-033 @MULFF.P1
+030     clock_isr.@SCRATCH
+031-032 @PRINTF_LU_9600_62_63.P1
+031     clock_isr.@SCRATCH
+032     @PRINTF_X_9600_62_63.P1
+032     clock_isr.@SCRATCH
+033     @PRINTF_X_9600_62_63.P1
+033-036 @PRINTF_F_9600_62_63.P2
+033     clock_isr.@SCRATCH
+033     @PRINTF_LU_9600_62_63.@SCRATCH
+034     @MULFF.@SCRATCH
+034     @PRINTF_LU_9600_62_63.@SCRATCH
+035     @MULFF.@SCRATCH
+035     @PRINTF_LU_9600_62_63.@SCRATCH
+036     @MULFF.@SCRATCH
+036     @PRINTF_LU_9600_62_63.@SCRATCH
+037-03A @PRINTF_F_9600_62_63.P1
+037     @MULFF.@SCRATCH
+037     @PRINTF_LU_9600_62_63.@SCRATCH
+038     @MULFF.@SCRATCH
+038     @PRINTF_LU_9600_62_63.@SCRATCH
+03B     @PRINTF_F_9600_62_63.@SCRATCH
+03C     @PRINTF_F_9600_62_63.@SCRATCH
+03D     @PRINTF_F_9600_62_63.@SCRATCH
+03E     @PRINTF_F_9600_62_63.@SCRATCH
+03F     @PRINTF_F_9600_62_63.@SCRATCH
+040     @PRINTF_F_9600_62_63.@SCRATCH
+041     @PRINTF_F_9600_62_63.@SCRATCH
+042     @PRINTF_F_9600_62_63.@SCRATCH
+043     @PRINTF_F_9600_62_63.@SCRATCH
+044     @PRINTF_F_9600_62_63.@SCRATCH
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+07B     @SCRATCH
+07F     @INTERRUPT_AREA
+0FF     @INTERRUPT_AREA
+17F     @INTERRUPT_AREA
+1FF     @INTERRUPT_AREA
+27F     @INTERRUPT_AREA
+2FF     @INTERRUPT_AREA
+37F     @INTERRUPT_AREA
+3FF     @INTERRUPT_AREA
+
+1F00  loader16F877
+02FA  clock_isr
+0033  @const10025
+0061  @ITOF
+0081  @MULFF
+00FA  @PRINTF_LU_9600_62_63
+0154  @PRINTF_X_9600_62_63
+0177  @PRINTF_F_9600_62_63
+0386  main
+0386  @cinit
+
+Project Files:
+    C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.c
+    C:\Archivos de programa\PICC\devices\16f877.h
+
+Compiler Settings:
+    Processor:      PIC16F877
+    Pointer Size:   8
+    ADC Range:      0-1023
+    Opt Level:      9
+    Short,Int,Long: 1,8,16
+
+Output Files:
+    Errors:      C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.err
+    INHX8:       C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.HEX
+    Symbols:     C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.SYM
+    List:        C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.LST
+    Debug/COFF:  C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.cof
+    Project:     C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.PJT
+    Call Tree:   C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.tre
+    Statistics:  C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.sta

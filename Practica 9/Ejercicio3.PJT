@@ -1,0 +1,35 @@
+[PROJECT]
+Target=Ejercicio 3.HEX
+Development_Mode=2
+Processor=0x877F
+ToolSuite=CCS
+
+[Directories]
+Include=
+Library=
+LinkerScript=
+
+[Target Data]
+FileList=Ejercicio 3.c;
+BuildTool=C-COMPILER
+OptionString=+FM
+AdditionalOptionString=
+BuildRequired=1
+
+[Ejercicio 3.c]
+Type=4
+Path=
+FileList=
+BuildTool=
+OptionString=
+AdditionalOptionString=
+
+[mru-list]
+1=C:\DOCUME~1\micros\ESCRIT~1\PRACTI~1\EJERCI~3.C
+
+[Windows]
+0=0000 C:\DOCUME~1\micros\ESCRIT~1\PRACTI~1\EJERCI~3.C 0 0 796 451 3 0
+
+[Opened Files]
+1=C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio 3.c
+2=

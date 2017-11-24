@@ -1,0 +1,220 @@
+CCS PCM C Compiler, Version 3.184, 22094
+
+               Filename: C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio1.LST
+
+               ROM used: 885 (11%)
+                         Largest free fragment is 2048
+               RAM used: 15 (9%) at main() level
+                         32 (18%) worst case
+               Stack:    2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   2CB
+0003:  NOP
+....................  #include <16f877.h> 
+....................  //////// Standard Header file for the PIC16F877 device ////////////////  
+.................... #device PIC16F877  
+.................... #list  
+....................  
+.................... #fuses HS,NOPROTECT,  
+.................... #device ADC=10                          // Convertidor A/D indica resolución de 8 bits  
+.................... #use delay(clock=20000000)             // Frec. de Osc. 20Mhz  
+.................... //Configuracion del Puerto SERIAL  
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)   
+.................... #org 0x1F00, 0x1FFF void loader16F877(void) {}    
+*
+1F00:  RETLW  00
+....................   
+.................... long var;  
+....................   
+.................... void main(){	  
+....................     //Configuración del Puerto A como analógico   
+*
+02CB:  CLRF   04
+02CC:  MOVLW  1F
+02CD:  ANDWF  03,F
+02CE:  MOVLW  06
+02CF:  BSF    03.5
+02D0:  MOVWF  1F
+02D1:  MOVLW  81
+02D2:  MOVWF  19
+02D3:  MOVLW  26
+02D4:  MOVWF  18
+02D5:  MOVLW  90
+02D6:  BCF    03.5
+02D7:  MOVWF  18
+....................     setup_port_a(ALL_ANALOG);     
+02D8:  MOVLW  80
+02D9:  BSF    03.5
+02DA:  MOVWF  1F
+....................        setup_adc(ADC_CLOCK_INTERNAL); // Relog interno de Conv. A/D  
+02DB:  BCF    03.5
+02DC:  MOVF   1F,W
+02DD:  ANDLW  38
+02DE:  IORLW  C1
+02DF:  MOVWF  1F
+....................     set_adc_channel(0);               // Selecion del canal 0   
+02E0:  MOVLW  00
+02E1:  MOVWF  78
+02E2:  MOVF   1F,W
+02E3:  ANDLW  C7
+02E4:  IORWF  78,W
+02E5:  MOVWF  1F
+....................   
+....................     while(1){  
+....................         delay_us(20);                 // Retardo de 20us (microsegundos)   
+02E6:  MOVLW  21
+02E7:  MOVWF  77
+02E8:  DECFSZ 77,F
+02E9:  GOTO   2E8
+....................         var=read_adc();               // Se asigna a var la lectura del Canal 0    
+02EA:  BSF    1F.2
+02EB:  BTFSC  1F.2
+02EC:  GOTO   2EB
+02ED:  BSF    03.5
+02EE:  MOVF   1E,W
+02EF:  BCF    03.5
+02F0:  MOVWF  20
+02F1:  MOVF   1E,W
+02F2:  MOVWF  21
+....................         delay_us(20);                 // Retardo de 20us (microsegundos)  
+02F3:  MOVLW  21
+02F4:  MOVWF  77
+02F5:  DECFSZ 77,F
+02F6:  GOTO   2F5
+....................         output_b(var);                // Se muestra  var en el puerto B   
+02F7:  MOVLW  00
+02F8:  BSF    03.5
+02F9:  MOVWF  06
+02FA:  BCF    03.5
+02FB:  MOVF   20,W
+02FC:  MOVWF  06
+....................                             
+....................         printf(" voltaje =%lu [dec], %LX [hex], %2f[v]\n\r ",var,var,(var*0.0196));   
+02FD:  MOVF   21,W
+02FE:  MOVWF  23
+02FF:  MOVF   20,W
+0300:  MOVWF  22
+0301:  GOTO   032
+0302:  MOVF   7A,W
+0303:  MOVWF  25
+0304:  MOVF   79,W
+0305:  MOVWF  24
+0306:  MOVF   78,W
+0307:  MOVWF  23
+0308:  MOVF   77,W
+0309:  MOVWF  22
+030A:  MOVLW  2E
+030B:  MOVWF  29
+030C:  MOVLW  90
+030D:  MOVWF  28
+030E:  MOVLW  20
+030F:  MOVWF  27
+0310:  MOVLW  79
+0311:  MOVWF  26
+0312:  GOTO   052
+0313:  MOVF   77,W
+0314:  MOVWF  22
+0315:  MOVF   78,W
+0316:  MOVWF  23
+0317:  MOVF   79,W
+0318:  MOVWF  24
+0319:  MOVF   7A,W
+031A:  MOVWF  25
+031B:  CLRF   26
+031C:  MOVF   26,W
+031D:  CALL   004
+031E:  INCF   26,F
+031F:  MOVWF  77
+0320:  MOVF   77,W
+0321:  BTFSS  0C.4
+0322:  GOTO   321
+0323:  MOVWF  19
+0324:  MOVLW  0A
+0325:  SUBWF  26,W
+0326:  BTFSS  03.2
+0327:  GOTO   31C
+0328:  MOVLW  10
+0329:  MOVWF  04
+032A:  MOVF   21,W
+032B:  MOVWF  28
+032C:  MOVF   20,W
+032D:  MOVWF  27
+032E:  GOTO   0CB
+032F:  MOVLW  0D
+0330:  MOVWF  27
+0331:  MOVF   27,W
+0332:  CALL   004
+0333:  INCF   27,F
+0334:  MOVWF  77
+0335:  MOVF   77,W
+0336:  BTFSS  0C.4
+0337:  GOTO   336
+0338:  MOVWF  19
+0339:  MOVLW  15
+033A:  SUBWF  27,W
+033B:  BTFSS  03.2
+033C:  GOTO   331
+033D:  MOVF   21,W
+033E:  MOVWF  28
+033F:  MOVLW  37
+0340:  MOVWF  29
+0341:  CALL   125
+0342:  MOVF   20,W
+0343:  MOVWF  28
+0344:  MOVLW  37
+0345:  MOVWF  29
+0346:  CALL   125
+0347:  MOVLW  18
+0348:  MOVWF  28
+0349:  MOVF   28,W
+034A:  CALL   004
+034B:  INCF   28,F
+034C:  MOVWF  77
+034D:  MOVF   77,W
+034E:  BTFSS  0C.4
+034F:  GOTO   34E
+0350:  MOVWF  19
+0351:  MOVLW  20
+0352:  SUBWF  28,W
+0353:  BTFSS  03.2
+0354:  GOTO   349
+0355:  MOVF   25,W
+0356:  MOVWF  2C
+0357:  MOVF   24,W
+0358:  MOVWF  2B
+0359:  MOVF   23,W
+035A:  MOVWF  2A
+035B:  MOVF   22,W
+035C:  MOVWF  29
+035D:  CLRF   30
+035E:  CLRF   2F
+035F:  MOVLW  01
+0360:  MOVWF  2E
+0361:  MOVLW  06
+0362:  MOVWF  2D
+0363:  GOTO   148
+0364:  MOVLW  23
+0365:  MOVWF  29
+0366:  MOVF   29,W
+0367:  CALL   004
+0368:  INCF   29,F
+0369:  MOVWF  77
+036A:  MOVF   77,W
+036B:  BTFSS  0C.4
+036C:  GOTO   36B
+036D:  MOVWF  19
+036E:  MOVLW  29
+036F:  SUBWF  29,W
+0370:  BTFSS  03.2
+0371:  GOTO   366
+....................     }  
+0372:  GOTO   2E6
+.................... }   
+....................  
+0373:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3FFE   HS WDT NOPUT NOPROTECT BROWNOUT LVP NOCPD NOWRT NODEBUG

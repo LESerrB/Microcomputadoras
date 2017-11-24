@@ -1,0 +1,329 @@
+CCS PCM C Compiler, Version 3.184, 22094
+
+               Filename: C:\Documents and Settings\micros\Escritorio\Practica 9\Ejercicio2.LST
+
+               ROM used: 974 (12%)
+                         Largest free fragment is 2048
+               RAM used: 17 (10%) at main() level
+                         42 (24%) worst case
+               Stack:    2 worst case (0 in main + 2 for interrupts)
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   386
+0003:  NOP
+0004:  MOVWF  7F
+0005:  SWAPF  03,W
+0006:  CLRF   03
+0007:  MOVWF  21
+0008:  MOVF   0A,W
+0009:  MOVWF  20
+000A:  CLRF   0A
+000B:  MOVF   04,W
+000C:  MOVWF  22
+000D:  MOVF   77,W
+000E:  MOVWF  23
+000F:  MOVF   78,W
+0010:  MOVWF  24
+0011:  MOVF   79,W
+0012:  MOVWF  25
+0013:  MOVF   7A,W
+0014:  MOVWF  26
+0015:  MOVF   7B,W
+0016:  MOVWF  27
+0017:  BCF    03.7
+0018:  BCF    03.5
+0019:  BTFSS  0B.5
+001A:  GOTO   01D
+001B:  BTFSC  0B.2
+001C:  GOTO   030
+001D:  MOVF   22,W
+001E:  MOVWF  04
+001F:  MOVF   23,W
+0020:  MOVWF  77
+0021:  MOVF   24,W
+0022:  MOVWF  78
+0023:  MOVF   25,W
+0024:  MOVWF  79
+0025:  MOVF   26,W
+0026:  MOVWF  7A
+0027:  MOVF   27,W
+0028:  MOVWF  7B
+0029:  MOVF   20,W
+002A:  MOVWF  0A
+002B:  SWAPF  21,W
+002C:  MOVWF  03
+002D:  SWAPF  7F,F
+002E:  SWAPF  7F,W
+002F:  RETFIE
+0030:  BCF    0A.3
+0031:  BCF    0A.4
+0032:  GOTO   2FA
+....................  #include <16f877.h> 
+....................  //////// Standard Header file for the PIC16F877 device ////////////////  
+.................... #device PIC16F877  
+.................... #list  
+....................  
+.................... #device ADC=10  
+.................... #fuses HS,NOPROTECT,  
+.................... #use delay(clock=20000000)  
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)  
+.................... #org 0x1F00, 0x1FFF  
+....................   
+.................... void loader16F877(void) {}  
+*
+1F00:  RETLW  00
+....................   
+.................... long var;  
+.................... int16 contador=0;  
+*
+0393:  CLRF   2A
+0394:  CLRF   2B
+....................   
+.................... #int_rtcc  
+....................   
+.................... clock_isr(){                  // Rutina de interrupcion por Timer0  
+....................     contador++;               // Incrementa contador  
+*
+02FA:  INCF   2A,F
+02FB:  BTFSC  03.2
+02FC:  INCF   2B,F
+....................     if(contador==770){  
+02FD:  MOVF   2A,W
+02FE:  SUBLW  02
+02FF:  BTFSS  03.2
+0300:  GOTO   382
+0301:  MOVF   2B,W
+0302:  SUBLW  03
+0303:  BTFSS  03.2
+0304:  GOTO   382
+....................        output_b(var);   //Se muestra  resultado como salida  
+0305:  MOVLW  00
+0306:  BSF    03.5
+0307:  MOVWF  06
+0308:  BCF    03.5
+0309:  MOVF   28,W
+030A:  MOVWF  06
+....................   
+....................        printf(" voltaje =%lu [dec], %LX [hex], %2f[v]\n\r ",var,var,(var*0.0196));  
+030B:  MOVF   29,W
+030C:  MOVWF  2D
+030D:  MOVF   28,W
+030E:  MOVWF  2C
+030F:  GOTO   061
+0310:  MOVF   7A,W
+0311:  MOVWF  2F
+0312:  MOVF   79,W
+0313:  MOVWF  2E
+0314:  MOVF   78,W
+0315:  MOVWF  2D
+0316:  MOVF   77,W
+0317:  MOVWF  2C
+0318:  MOVLW  2E
+0319:  MOVWF  33
+031A:  MOVLW  90
+031B:  MOVWF  32
+031C:  MOVLW  20
+031D:  MOVWF  31
+031E:  MOVLW  79
+031F:  MOVWF  30
+0320:  GOTO   081
+0321:  MOVF   77,W
+0322:  MOVWF  2C
+0323:  MOVF   78,W
+0324:  MOVWF  2D
+0325:  MOVF   79,W
+0326:  MOVWF  2E
+0327:  MOVF   7A,W
+0328:  MOVWF  2F
+0329:  CLRF   30
+032A:  MOVF   30,W
+032B:  CALL   033
+032C:  INCF   30,F
+032D:  MOVWF  77
+032E:  MOVF   77,W
+032F:  BTFSS  0C.4
+0330:  GOTO   32F
+0331:  MOVWF  19
+0332:  MOVLW  0A
+0333:  SUBWF  30,W
+0334:  BTFSS  03.2
+0335:  GOTO   32A
+0336:  MOVLW  10
+0337:  MOVWF  04
+0338:  MOVF   29,W
+0339:  MOVWF  32
+033A:  MOVF   28,W
+033B:  MOVWF  31
+033C:  GOTO   0FA
+033D:  MOVLW  0D
+033E:  MOVWF  31
+033F:  MOVF   31,W
+0340:  CALL   033
+0341:  INCF   31,F
+0342:  MOVWF  77
+0343:  MOVF   77,W
+0344:  BTFSS  0C.4
+0345:  GOTO   344
+0346:  MOVWF  19
+0347:  MOVLW  15
+0348:  SUBWF  31,W
+0349:  BTFSS  03.2
+034A:  GOTO   33F
+034B:  MOVF   29,W
+034C:  MOVWF  32
+034D:  MOVLW  37
+034E:  MOVWF  33
+034F:  CALL   154
+0350:  MOVF   28,W
+0351:  MOVWF  32
+0352:  MOVLW  37
+0353:  MOVWF  33
+0354:  CALL   154
+0355:  MOVLW  18
+0356:  MOVWF  32
+0357:  MOVF   32,W
+0358:  CALL   033
+0359:  INCF   32,F
+035A:  MOVWF  77
+035B:  MOVF   77,W
+035C:  BTFSS  0C.4
+035D:  GOTO   35C
+035E:  MOVWF  19
+035F:  MOVLW  20
+0360:  SUBWF  32,W
+0361:  BTFSS  03.2
+0362:  GOTO   357
+0363:  MOVF   2F,W
+0364:  MOVWF  36
+0365:  MOVF   2E,W
+0366:  MOVWF  35
+0367:  MOVF   2D,W
+0368:  MOVWF  34
+0369:  MOVF   2C,W
+036A:  MOVWF  33
+036B:  CLRF   3A
+036C:  CLRF   39
+036D:  MOVLW  01
+036E:  MOVWF  38
+036F:  MOVLW  06
+0370:  MOVWF  37
+0371:  GOTO   177
+0372:  MOVLW  23
+0373:  MOVWF  33
+0374:  MOVF   33,W
+0375:  CALL   033
+0376:  INCF   33,F
+0377:  MOVWF  77
+0378:  MOVF   77,W
+0379:  BTFSS  0C.4
+037A:  GOTO   379
+037B:  MOVWF  19
+037C:  MOVLW  29
+037D:  SUBWF  33,W
+037E:  BTFSS  03.2
+037F:  GOTO   374
+....................        contador=0; // Inicializa contador, se reinicia  
+0380:  CLRF   2B
+0381:  CLRF   2A
+....................     }  
+.................... }  
+0382:  BCF    0B.2
+0383:  BCF    0A.3
+0384:  BCF    0A.4
+0385:  GOTO   01D
+.................... void main(){  
+....................     //Configuración del Puerto A como analógico  
+0386:  CLRF   04
+0387:  MOVLW  1F
+0388:  ANDWF  03,F
+0389:  MOVLW  06
+038A:  BSF    03.5
+038B:  MOVWF  1F
+038C:  MOVLW  81
+038D:  MOVWF  19
+038E:  MOVLW  26
+038F:  MOVWF  18
+0390:  MOVLW  90
+0391:  BCF    03.5
+0392:  MOVWF  18
+....................     setup_port_a(ALL_ANALOG);  
+*
+0395:  MOVLW  80
+0396:  BSF    03.5
+0397:  MOVWF  1F
+....................     //Configuración del reloj interno ADC  
+....................     setup_adc(ADC_CLOCK_INTERNAL);  
+0398:  BCF    03.5
+0399:  MOVF   1F,W
+039A:  ANDLW  38
+039B:  IORLW  C1
+039C:  MOVWF  1F
+....................     set_adc_channel(0);             //Configuración del Canal 0  
+039D:  MOVLW  00
+039E:  MOVWF  78
+039F:  MOVF   1F,W
+03A0:  ANDLW  C7
+03A1:  IORWF  78,W
+03A2:  MOVWF  1F
+....................   
+....................     set_timer0(0);  
+03A3:  CLRF   01
+....................   
+....................     setup_counters(RTCC_INTERNAL,RTCC_DIV_256);  
+03A4:  MOVLW  07
+03A5:  MOVWF  77
+03A6:  BTFSS  77.3
+03A7:  GOTO   3B0
+03A8:  MOVLW  07
+03A9:  CLRF   01
+03AA:  MOVLW  81
+03AB:  MOVWF  04
+03AC:  MOVF   00,W
+03AD:  ANDLW  C0
+03AE:  IORLW  0F
+03AF:  MOVWF  00
+03B0:  CLRWDT
+03B1:  MOVLW  81
+03B2:  MOVWF  04
+03B3:  MOVF   00,W
+03B4:  ANDLW  C0
+03B5:  IORWF  77,W
+03B6:  MOVWF  00
+....................   
+....................     enable_interrupts(INT_RTCC);    // Habilita la interrupción TIMER0  
+03B7:  BSF    0B.5
+....................     enable_interrupts(GLOBAL);      // Habilita interrupciones generales  
+03B8:  MOVLW  C0
+03B9:  IORWF  0B,F
+....................   
+....................     while(1){                       // Ciclo while infinito  
+....................         delay_us(20);               // Retardo de 20us (microsegundos)  
+03BA:  MOVLW  21
+03BB:  MOVWF  77
+03BC:  DECFSZ 77,F
+03BD:  GOTO   3BC
+....................         var=read_adc();       // resultado=valor de ADC  
+03BE:  BSF    1F.2
+03BF:  BTFSC  1F.2
+03C0:  GOTO   3BF
+03C1:  BSF    03.5
+03C2:  MOVF   1E,W
+03C3:  BCF    03.5
+03C4:  MOVWF  28
+03C5:  MOVF   1E,W
+03C6:  MOVWF  29
+....................         delay_us(20);               // Retardo de 20us (microsegundos)  
+03C7:  MOVLW  21
+03C8:  MOVWF  77
+03C9:  DECFSZ 77,F
+03CA:  GOTO   3C9
+....................     }  
+03CB:  GOTO   3BA
+.................... }  
+....................  
+03CC:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3FFE   HS WDT NOPUT NOPROTECT BROWNOUT LVP NOCPD NOWRT NODEBUG

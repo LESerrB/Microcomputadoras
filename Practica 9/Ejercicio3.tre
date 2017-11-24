@@ -1,0 +1,17 @@
+ÀÄEjercicio 3
+   ÃÄmain  0/191  Ram=8
+   ³  ÃÄ??0??
+   ³  ÃÄ@ITOF  0/32  Ram=2
+   ³  ÃÄ@MULFF  0/121  Ram=13
+   ³  ÃÄ@const10043  0/46  Ram=0
+   ³  ÃÄ@PRINTF_LU_9600_62_63  0/90  Ram=8
+   ³  ÃÄ@const10043  0/46  Ram=0
+   ³  ÃÄ@PRINTF_X_9600_62_63  0/35  Ram=2
+   ³  ÃÄ@PRINTF_X_9600_62_63  0/35  Ram=2
+   ³  ÃÄ@const10043  0/46  Ram=0
+   ³  ÃÄ@PRINTF_F_9600_62_63  0/387  Ram=18
+   ³  ÃÄ@const10043  0/46  Ram=0
+   ³  ÀÄ@delay_ms1  0/21  Ram=1
+   ÃÄloader16F877  3/1  Ram=0
+   ÀÄclock_isr  0/30  Ram=1
+      ÀÄ@const10025  0/28  Ram=0

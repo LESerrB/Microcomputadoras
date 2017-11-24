@@ -1,0 +1,15 @@
+읕Ejercicio2
+   쳐main  0/71  Ram=0
+   �  읕??0??
+   쳐loader16F877  3/1  Ram=0
+   읕clock_isr  0/140  Ram=8
+      쳐@ITOF  0/32  Ram=2
+      쳐@MULFF  0/121  Ram=13
+      쳐@const10025  0/46  Ram=0
+      쳐@PRINTF_LU_9600_62_63  0/90  Ram=8
+      쳐@const10025  0/46  Ram=0
+      쳐@PRINTF_X_9600_62_63  0/35  Ram=2
+      쳐@PRINTF_X_9600_62_63  0/35  Ram=2
+      쳐@const10025  0/46  Ram=0
+      쳐@PRINTF_F_9600_62_63  0/387  Ram=18
+      읕@const10025  0/46  Ram=0

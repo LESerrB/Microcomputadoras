@@ -1,0 +1,39 @@
+
+ROM used: 325 (4%)
+          2048 (25%) including unused fragments
+
+          1 Average locations per line
+          15 Average locations per statement
+
+RAM used: 17 (10%) at main() level
+          18 (10%) worst case
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   55    22 100  D:\Microcomputadoras\Practica 9\ejerccio4.c
+  259     0   0  C:\Program Files (x86)\PICC\devices\16f877.h
+----- -----
+  628    44 Total
+
+Page ROM  %  RAM  Functions:
+---- --- --- ---  ----------
+3      1   0   0  loader16F877
+0     94  29   1  port_rb
+0     23   7   0  @const10024
+0     23   7   0  @const10031
+0     23   7   0  @const10038
+0     23   7   0  @const10045
+0     22   7   0  @const10052
+0     17   5   0  clock_isr
+0     41  13   0  main
+
+ Segment   Used  Free
+---------  ----  ----
+00000-00003     4  0
+00004-00039    54  0
+0003A-007FF   266  1724
+00800-00FFF     0  2048
+01000-017FF     0  2048
+01800-01EFF     0  1792
+01F00-01FFF     1  255
+

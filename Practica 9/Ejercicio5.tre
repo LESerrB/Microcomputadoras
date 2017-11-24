@@ -1,0 +1,11 @@
+ÀÄejerccio4
+   ÃÄmain  0/41  Ram=0
+   ³  ÀÄ??0??
+   ÃÄloader16F877  3/1  Ram=0
+   ÃÄport_rb  0/94  Ram=1
+   ³  ÃÄ@const10024  0/23  Ram=0
+   ³  ÃÄ@const10031  0/23  Ram=0
+   ³  ÃÄ@const10038  0/23  Ram=0
+   ³  ÃÄ@const10045  0/23  Ram=0
+   ³  ÀÄ@const10052  0/22  Ram=0
+   ÀÄclock_isr  0/17  Ram=0

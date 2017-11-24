@@ -1,0 +1,32 @@
+[PROJECT]
+Target=ejerccio4.HEX
+Development_Mode=2
+Processor=0x877F
+ToolSuite=CCS
+
+[Directories]
+Include=
+Library=
+LinkerScript=
+
+[Target Data]
+FileList=ejerccio4.c;
+BuildTool=C-COMPILER
+OptionString=+FM
+AdditionalOptionString=
+BuildRequired=1
+
+[ejerccio4.c]
+Type=4
+Path=
+FileList=
+BuildTool=
+OptionString=
+AdditionalOptionString=
+
+[mru-list]
+1=D:\MICROC~1\PR7304~1\EJERCC~1.C
+
+[Windows]
+0=0000 D:\MICROC~1\PR7304~1\EJERCC~1.C 0 0 796 451 3 0
+
