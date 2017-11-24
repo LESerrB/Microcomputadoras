@@ -1,0 +1,49 @@
+008     PSP_DATA
+015-016 CCP_1
+015     CCP_1_LOW
+016     CCP_1_HIGH
+01B-01C CCP_2
+01B     CCP_2_LOW
+01C     CCP_2_HIGH
+020     dato
+021     var
+022     c
+023     main.@SCRATCH
+024     @delay_ms1.P1
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+07B     @SCRATCH
+
+00BC  @delay_ms1
+1F00  loader16F877
+00CF  main
+0004  @const10048
+0024  @const10057
+0046  @const10066
+0067  @const10083
+008A  @const10100
+00AC  @const10131
+00CF  @cinit
+
+Project Files:
+    D:\Microcomputadoras\Practica 8\Ejercicio 2.C
+    C:\Program Files (x86)\PICC\devices\16f877.h
+
+Compiler Settings:
+    Processor:      PIC16F877
+    Pointer Size:   8
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: 1,8,16
+
+Output Files:
+    Errors:      D:\Microcomputadoras\Practica 8\Ejercicio 2.err
+    INHX8:       D:\Microcomputadoras\Practica 8\Ejercicio 2.HEX
+    Symbols:     D:\Microcomputadoras\Practica 8\Ejercicio 2.SYM
+    List:        D:\Microcomputadoras\Practica 8\Ejercicio 2.LST
+    Debug/COFF:  D:\Microcomputadoras\Practica 8\Ejercicio 2.cof
+    Call Tree:   D:\Microcomputadoras\Practica 8\Ejercicio 2.tre
+    Statistics:  D:\Microcomputadoras\Practica 8\Ejercicio 2.sta

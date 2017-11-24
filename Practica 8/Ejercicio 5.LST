@@ -1,0 +1,418 @@
+CCS PCM C Compiler, Version 3.184, 22094
+
+               Filename: D:\Microcomputadoras\Practica 8\Ejercicio 2.LST
+
+               ROM used: 490 (6%)
+                         Largest free fragment is 2048
+               RAM used: 9 (5%) at main() level
+                         10 (6%) worst case
+               Stack:    2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   0CF
+0003:  NOP
+....................  #include <16f877.h> 
+....................  //////// Standard Header file for the PIC16F877 device ////////////////  
+.................... #device PIC16F877  
+.................... #list  
+....................  
+.................... #fuses HS,NOPROTECT,  
+.................... #use delay(clock=20000000)  
+00BC:  MOVLW  24
+00BD:  MOVWF  04
+00BE:  MOVF   00,W
+00BF:  BTFSC  03.2
+00C0:  GOTO   0CE
+00C1:  MOVLW  06
+00C2:  MOVWF  78
+00C3:  CLRF   77
+00C4:  DECFSZ 77,F
+00C5:  GOTO   0C4
+00C6:  DECFSZ 78,F
+00C7:  GOTO   0C3
+00C8:  MOVLW  7B
+00C9:  MOVWF  77
+00CA:  DECFSZ 77,F
+00CB:  GOTO   0CA
+00CC:  DECFSZ 00,F
+00CD:  GOTO   0C1
+00CE:  RETLW  00
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)  
+.................... #org 0x1F00, 0x1FFF void loader16F877(void) {} //for the 8k 16F876/7  
+*
+1F00:  RETLW  00
+.................... char dato;  
+.................... int var, c = 0;  
+*
+00DC:  CLRF   22
+.................... void main(){  
+....................    while(1){  
+*
+00CF:  CLRF   04
+00D0:  MOVLW  1F
+00D1:  ANDWF  03,F
+00D2:  MOVLW  06
+00D3:  BSF    03.5
+00D4:  MOVWF  1F
+00D5:  MOVLW  81
+00D6:  MOVWF  19
+00D7:  MOVLW  26
+00D8:  MOVWF  18
+00D9:  MOVLW  90
+00DA:  BCF    03.5
+00DB:  MOVWF  18
+....................   
+....................       do {  
+....................          dato = getchar();  
+*
+00DD:  BTFSS  0C.5
+00DE:  GOTO   0DD
+00DF:  MOVF   1A,W
+00E0:  MOVWF  20
+....................       } while(dato!='0' && dato!='1' && dato!='2' && dato!='3' && dato!='4' && dato!='5');  
+....................   
+....................       if(dato == '0'){  
+00E1:  MOVF   20,W
+00E2:  SUBLW  30
+00E3:  BTFSC  03.2
+00E4:  GOTO   0F9
+00E5:  MOVF   20,W
+00E6:  SUBLW  31
+00E7:  BTFSC  03.2
+00E8:  GOTO   0F9
+00E9:  MOVF   20,W
+00EA:  SUBLW  32
+00EB:  BTFSC  03.2
+00EC:  GOTO   0F9
+00ED:  MOVF   20,W
+00EE:  SUBLW  33
+00EF:  BTFSC  03.2
+00F0:  GOTO   0F9
+00F1:  MOVF   20,W
+00F2:  SUBLW  34
+00F3:  BTFSC  03.2
+00F4:  GOTO   0F9
+00F5:  MOVF   20,W
+00F6:  SUBLW  35
+00F7:  BTFSS  03.2
+00F8:  GOTO   0DD
+00F9:  MOVF   20,W
+00FA:  SUBLW  30
+00FB:  BTFSS  03.2
+00FC:  GOTO   10F
+....................          printf(" Todos los bits apagados \n\r");  
+00FD:  CLRF   23
+00FE:  MOVF   23,W
+00FF:  CALL   004
+0100:  INCF   23,F
+0101:  MOVWF  77
+0102:  MOVF   77,W
+0103:  BTFSS  0C.4
+0104:  GOTO   103
+0105:  MOVWF  19
+0106:  MOVLW  1B
+0107:  SUBWF  23,W
+0108:  BTFSS  03.2
+0109:  GOTO   0FE
+....................          output_b(0x00);  
+010A:  MOVLW  00
+010B:  BSF    03.5
+010C:  MOVWF  06
+010D:  BCF    03.5
+010E:  CLRF   06
+....................       }  
+....................   
+....................       if(dato == '1'){  
+010F:  MOVF   20,W
+0110:  SUBLW  31
+0111:  BTFSS  03.2
+0112:  GOTO   126
+....................          printf(" Todos los bits encendidos \n\r");  
+0113:  CLRF   23
+0114:  MOVF   23,W
+0115:  CALL   024
+0116:  INCF   23,F
+0117:  MOVWF  77
+0118:  MOVF   77,W
+0119:  BTFSS  0C.4
+011A:  GOTO   119
+011B:  MOVWF  19
+011C:  MOVLW  1D
+011D:  SUBWF  23,W
+011E:  BTFSS  03.2
+011F:  GOTO   114
+....................          output_b(0xFF);  
+0120:  MOVLW  00
+0121:  BSF    03.5
+0122:  MOVWF  06
+0123:  MOVLW  FF
+0124:  BCF    03.5
+0125:  MOVWF  06
+....................       }  
+....................   
+....................       if(dato == '2'){  
+0126:  MOVF   20,W
+0127:  SUBLW  32
+0128:  BTFSS  03.2
+0129:  GOTO   14F
+....................          printf(" Corrimiento a la derecha \n\r");  
+012A:  CLRF   23
+012B:  MOVF   23,W
+012C:  CALL   046
+012D:  INCF   23,F
+012E:  MOVWF  77
+012F:  MOVF   77,W
+0130:  BTFSS  0C.4
+0131:  GOTO   130
+0132:  MOVWF  19
+0133:  MOVLW  1C
+0134:  SUBWF  23,W
+0135:  BTFSS  03.2
+0136:  GOTO   12B
+....................          var = 0x80;  
+0137:  MOVLW  80
+0138:  MOVWF  21
+....................          c=0;  
+0139:  CLRF   22
+....................          do{  
+....................          	rotate_right(&var,1);  
+013A:  RRF    21,W
+013B:  RRF    21,F
+....................          	output_b(var);  
+013C:  MOVLW  00
+013D:  BSF    03.5
+013E:  MOVWF  06
+013F:  BCF    03.5
+0140:  MOVF   21,W
+0141:  MOVWF  06
+....................          	delay_ms(1000);  
+0142:  MOVLW  04
+0143:  MOVWF  23
+0144:  MOVLW  FA
+0145:  MOVWF  24
+0146:  CALL   0BC
+0147:  DECFSZ 23,F
+0148:  GOTO   144
+....................             c++;  
+0149:  INCF   22,F
+....................             if(c==10)  
+....................                break;  
+014A:  MOVF   22,W
+014B:  SUBLW  0A
+014C:  BTFSC  03.2
+014D:  GOTO   14F
+....................          }while(true);  
+....................       }  
+014E:  GOTO   13A
+....................   
+....................       if(dato == '3'){  
+014F:  MOVF   20,W
+0150:  SUBLW  33
+0151:  BTFSS  03.2
+0152:  GOTO   178
+....................          printf(" Corrimiento a la izquierda \n\r");  
+0153:  CLRF   23
+0154:  MOVF   23,W
+0155:  CALL   067
+0156:  INCF   23,F
+0157:  MOVWF  77
+0158:  MOVF   77,W
+0159:  BTFSS  0C.4
+015A:  GOTO   159
+015B:  MOVWF  19
+015C:  MOVLW  1E
+015D:  SUBWF  23,W
+015E:  BTFSS  03.2
+015F:  GOTO   154
+....................          var = 0x01;  
+0160:  MOVLW  01
+0161:  MOVWF  21
+....................          c=0;  
+0162:  CLRF   22
+....................          do{  
+....................          	rotate_left(&var,1);  
+0163:  RLF    21,W
+0164:  RLF    21,F
+.................... 	         output_b(var);  
+0165:  MOVLW  00
+0166:  BSF    03.5
+0167:  MOVWF  06
+0168:  BCF    03.5
+0169:  MOVF   21,W
+016A:  MOVWF  06
+.................... 	         delay_ms(1000);  
+016B:  MOVLW  04
+016C:  MOVWF  23
+016D:  MOVLW  FA
+016E:  MOVWF  24
+016F:  CALL   0BC
+0170:  DECFSZ 23,F
+0171:  GOTO   16D
+....................             c++;  
+0172:  INCF   22,F
+....................             if(c==10)  
+....................                break;  
+0173:  MOVF   22,W
+0174:  SUBLW  0A
+0175:  BTFSC  03.2
+0176:  GOTO   178
+....................          }while(true);  
+....................       }  
+0177:  GOTO   163
+....................   
+....................       if(dato == '4'){  
+0178:  MOVF   20,W
+0179:  SUBLW  34
+017A:  BTFSS  03.2
+017B:  GOTO   1B6
+....................          printf(" Corrimiento a ambos lados \n\r");  
+017C:  CLRF   23
+017D:  MOVF   23,W
+017E:  CALL   08A
+017F:  INCF   23,F
+0180:  MOVWF  77
+0181:  MOVF   77,W
+0182:  BTFSS  0C.4
+0183:  GOTO   182
+0184:  MOVWF  19
+0185:  MOVLW  1D
+0186:  SUBWF  23,W
+0187:  BTFSS  03.2
+0188:  GOTO   17D
+....................          var = 0x80;  
+0189:  MOVLW  80
+018A:  MOVWF  21
+....................          c=0;  
+018B:  CLRF   22
+....................          while(true){        
+....................             do{  
+....................             	rotate_right(&var,1);  
+018C:  RRF    21,W
+018D:  RRF    21,F
+....................             	output_b(var);  
+018E:  MOVLW  00
+018F:  BSF    03.5
+0190:  MOVWF  06
+0191:  BCF    03.5
+0192:  MOVF   21,W
+0193:  MOVWF  06
+....................             	delay_ms(1000);  
+0194:  MOVLW  04
+0195:  MOVWF  23
+0196:  MOVLW  FA
+0197:  MOVWF  24
+0198:  CALL   0BC
+0199:  DECFSZ 23,F
+019A:  GOTO   196
+....................             }while(var!=0x01);  
+....................      
+....................             do{  
+019B:  DECFSZ 21,W
+019C:  GOTO   18C
+....................             	rotate_left(&var,1);  
+019D:  RLF    21,W
+019E:  RLF    21,F
+....................    	         output_b(var);  
+019F:  MOVLW  00
+01A0:  BSF    03.5
+01A1:  MOVWF  06
+01A2:  BCF    03.5
+01A3:  MOVF   21,W
+01A4:  MOVWF  06
+....................    	         delay_ms(1000);  
+01A5:  MOVLW  04
+01A6:  MOVWF  23
+01A7:  MOVLW  FA
+01A8:  MOVWF  24
+01A9:  CALL   0BC
+01AA:  DECFSZ 23,F
+01AB:  GOTO   1A7
+....................             }while(var!=0x80);  
+....................             c++;  
+01AC:  MOVF   21,W
+01AD:  SUBLW  80
+01AE:  BTFSS  03.2
+01AF:  GOTO   19D
+01B0:  INCF   22,F
+....................             if(c==10)  
+....................                break;    
+01B1:  MOVF   22,W
+01B2:  SUBLW  0A
+01B3:  BTFSC  03.2
+01B4:  GOTO   1B6
+....................          }  
+01B5:  GOTO   18C
+....................       }  
+....................   
+....................       if(dato == '5'){  
+01B6:  MOVF   20,W
+01B7:  SUBLW  35
+01B8:  BTFSS  03.2
+01B9:  GOTO   1E7
+....................          printf(" Flasheo \n\r");  
+01BA:  CLRF   23
+01BB:  MOVF   23,W
+01BC:  CALL   0AC
+01BD:  INCF   23,F
+01BE:  MOVWF  77
+01BF:  MOVF   77,W
+01C0:  BTFSS  0C.4
+01C1:  GOTO   1C0
+01C2:  MOVWF  19
+01C3:  MOVLW  0B
+01C4:  SUBWF  23,W
+01C5:  BTFSS  03.2
+01C6:  GOTO   1BB
+....................          c=0;  
+01C7:  CLRF   22
+....................          while(true){  
+....................             output_b(0x00);  
+01C8:  MOVLW  00
+01C9:  BSF    03.5
+01CA:  MOVWF  06
+01CB:  BCF    03.5
+01CC:  CLRF   06
+....................             delay_ms(1000);  
+01CD:  MOVLW  04
+01CE:  MOVWF  23
+01CF:  MOVLW  FA
+01D0:  MOVWF  24
+01D1:  CALL   0BC
+01D2:  DECFSZ 23,F
+01D3:  GOTO   1CF
+....................             output_b(0xFF);  
+01D4:  MOVLW  00
+01D5:  BSF    03.5
+01D6:  MOVWF  06
+01D7:  MOVLW  FF
+01D8:  BCF    03.5
+01D9:  MOVWF  06
+....................             delay_ms(1000);  
+01DA:  MOVLW  04
+01DB:  MOVWF  23
+01DC:  MOVLW  FA
+01DD:  MOVWF  24
+01DE:  CALL   0BC
+01DF:  DECFSZ 23,F
+01E0:  GOTO   1DC
+....................             c++;  
+01E1:  INCF   22,F
+....................             if(c==10)  
+....................                break;  
+01E2:  MOVF   22,W
+01E3:  SUBLW  0A
+01E4:  BTFSC  03.2
+01E5:  GOTO   1E7
+....................          }  
+01E6:  GOTO   1C8
+....................       }  
+....................    }  
+01E7:  GOTO   0DD
+.................... }  
+....................  
+01E8:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3FFE   HS WDT NOPUT NOPROTECT BROWNOUT LVP NOCPD NOWRT NODEBUG

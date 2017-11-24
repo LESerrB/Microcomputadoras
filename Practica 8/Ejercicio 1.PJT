@@ -1,0 +1,35 @@
+[PROJECT]
+Target=Ejercicio 1.HEX
+Development_Mode=2
+Processor=0x877F
+ToolSuite=CCS
+
+[Directories]
+Include=
+Library=
+LinkerScript=
+
+[Target Data]
+FileList=Ejercicio 1.c;
+BuildTool=C-COMPILER
+OptionString=+FM
+AdditionalOptionString=
+BuildRequired=1
+
+[Ejercicio 1.c]
+Type=4
+Path=
+FileList=
+BuildTool=
+OptionString=
+AdditionalOptionString=
+
+[mru-list]
+1=E:\MICROC~1\PR6304~1\EJERCI~1.C
+
+[Windows]
+0=0000 E:\MICROC~1\PR6304~1\EJERCI~1.C 0 0 796 451 3 0
+
+[Opened Files]
+1=E:\Microcomputadoras\Practica 8\Ejercicio 1.c
+2=

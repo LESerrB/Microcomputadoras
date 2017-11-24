@@ -1,0 +1,34 @@
+
+ROM used: 156 (2%)
+          2048 (25%) including unused fragments
+
+          1 Average locations per line
+          20 Average locations per statement
+
+RAM used: 6 (3%) at main() level
+          7 (4%) worst case
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   16     8 100  E:\Microcomputadoras\Practica 8\Ejercicio 1.c
+  259     0   0  C:\Archivos de programa\PICC\devices\16f877.h
+----- -----
+  550    16 Total
+
+Page ROM  %  RAM  Functions:
+---- --- --- ---  ----------
+0     19  12   1  @delay_ms1
+3      1   1   0  loader16F877
+0     66  42   1  main
+0     34  22   0  @const10026
+0     32  21   0  @const10032
+
+ Segment   Used  Free
+---------  ----  ----
+00000-00003     4  0
+00004-007FF   151  1893
+00800-00FFF     0  2048
+01000-017FF     0  2048
+01800-01EFF     0  1792
+01F00-01FFF     1  255
+
