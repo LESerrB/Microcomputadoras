@@ -1,0 +1,974 @@
+CCS PCM C Compiler, Version 3.184, 22094
+
+               Filename: D:\Microcomputadoras\practica5t\TecLSD03.LST
+
+               ROM used: 561 (7%)
+                         Largest free fragment is 2048
+               RAM used: 20 (11%) at main() level
+                         21 (12%) worst case
+               Stack:    2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   024
+0003:  NOP
+....................  /*  
+.................... LCD_Hola.c  
+.................... 22-Julio_2011  
+....................   
+.................... Manda un mensaje de "Hola" a la LCD  
+....................   
+.................... Nota: La LCD Debe conectarse en modo  
+.................... de 8 Bits.  
+....................   
+.................... Ver pag 212 de la datasheet impresa  
+....................   
+.................... Recordar que:  
+....................   
+.................... GND (Tierra)         PIN 1  de la LCD  
+.................... VCC                  PIN 2  de la LCD  
+.................... Contraste            PIN 3  de la LCD  
+....................   
+.................... RS      PORTE,2        PIN 4  de la LCD  
+.................... RW      PORTE,1        PIN 5  de la LCD  
+.................... E      PORTE,0        PIN 6  de la LCD  
+....................   
+.................... DB0   PORTB,0        PIN 7  de la LCD  
+.................... DB1   PORTB,1        PIN 8  de la LCD  
+.................... DB2   PORTB,2        PIN 9  de la LCD  
+.................... DB3   PORTB,3        PIN 10 de la LCD  
+.................... DB4   PORTB,4        PIN 11 de la LCD  
+.................... DB5   PORTB,5        PIN 12 de la LCD  
+.................... DB6   PORTB,6        PIN 13 de la LCD  
+.................... DB7   PORTB,7        PIN 14 de la LCD  
+....................   
+.................... No Conection (N.C.)  PIN 15 de la LCD  
+.................... No Conection (N.C.)  PIN 16 de la LCD  
+....................   
+.................... clave de equipo 6E  retardo 2s  
+.................... */  
+....................   
+....................   
+.................... //Encabezados  
+.................... #include <16f877.h> 
+....................  //////// Standard Header file for the PIC16F877 device ////////////////  
+.................... #device PIC16F877  
+.................... #list  
+....................  
+....................   
+.................... #fuses HS,NOPROTECT,  
+.................... #use delay(clock=20000000)  
+0004:  MOVLW  2F
+0005:  MOVWF  04
+0006:  MOVF   00,W
+0007:  BTFSC  03.2
+0008:  GOTO   016
+0009:  MOVLW  06
+000A:  MOVWF  78
+000B:  CLRF   77
+000C:  DECFSZ 77,F
+000D:  GOTO   00C
+000E:  DECFSZ 78,F
+000F:  GOTO   00B
+0010:  MOVLW  7B
+0011:  MOVWF  77
+0012:  DECFSZ 77,F
+0013:  GOTO   012
+0014:  DECFSZ 00,F
+0015:  GOTO   009
+0016:  RETLW  00
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)  
+.................... #org 0x1F00, 0x1FFF void loader16F877(void) {} //for the 8k 16F876/7  
+*
+1F00:  RETLW  00
+....................   
+.................... //Definiciones  
+....................   
+.................... #byte    PORTB =  0x06  
+.................... #byte    PORTE =  0x09  
+.................... #byte    PORTD =  0x08  
+.................... #byte    TRISB =  0x86  
+.................... #byte    TRISD =  0x88  
+....................   
+.................... #define  RS       2  
+.................... #define  RW       1  
+.................... #define  E        0  
+....................   
+.................... int cont=0;  
+*
+0031:  CLRF   20
+.................... int DATA11[11], DATA;  
+....................   
+....................   
+.................... //Declaracion de funciones globales  
+.................... void fncEscribe(char);  
+....................   
+.................... void main()  
+.................... {  
+*
+0024:  CLRF   04
+0025:  MOVLW  1F
+0026:  ANDWF  03,F
+0027:  MOVLW  06
+0028:  BSF    03.5
+0029:  MOVWF  1F
+002A:  MOVLW  81
+002B:  MOVWF  19
+002C:  MOVLW  26
+002D:  MOVWF  18
+002E:  MOVLW  90
+002F:  BCF    03.5
+0030:  MOVWF  18
+....................    //Puerto B como salida  
+....................    set_tris_b(0x00);  
+*
+0032:  MOVLW  00
+0033:  BSF    03.5
+0034:  MOVWF  06
+....................    //Puerto E como salida  
+....................    set_tris_e(0x00);  
+0035:  BCF    09.0
+0036:  BCF    09.1
+0037:  BCF    09.2
+....................    //int i = 8;  
+....................   
+....................    //Bits 0 y 1 del puerto D como entrada  
+....................    bit_set(TRISD,0);  
+0038:  BSF    08.0
+....................    bit_set(TRISD,1);  
+0039:  BSF    08.1
+....................    //Puerto B como salida  
+....................    set_tris_b(0x00);  
+003A:  MOVWF  06
+....................   
+....................    //Redardo para que todo se estabilice  
+....................    delay_ms(1000);  
+003B:  MOVLW  04
+003C:  BCF    03.5
+003D:  MOVWF  2E
+003E:  MOVLW  FA
+003F:  MOVWF  2F
+0040:  CALL   004
+0041:  DECFSZ 2E,F
+0042:  GOTO   03E
+....................    //Condicion Inicial  
+....................    //Todos los puertos en 0  
+....................    output_b(0x00);  
+0043:  MOVLW  00
+0044:  BSF    03.5
+0045:  MOVWF  06
+0046:  BCF    03.5
+0047:  CLRF   06
+....................    output_e(0x00);  
+0048:  BSF    03.5
+0049:  MOVWF  09
+004A:  BCF    03.5
+004B:  CLRF   09
+....................   
+....................    //-----------------------------------//  
+....................    //Rutina de Inicializacion de la LCD  
+....................    //-----------------------------------//  
+....................   
+....................    //1.  Retardo de 16ms para que todos  
+....................    //    los voltajes se estabilizen.  
+....................   
+....................    delay_ms(16);        //Retardo de 16ms  
+004C:  MOVLW  10
+004D:  MOVWF  2F
+004E:  CALL   004
+....................   
+....................    //2.-  
+....................   
+....................    //Nota: Siempre que se manda un comando  
+....................    //la terminal de control debe ser puesta a 1 (E=1)  
+....................    //y luego rehresada a cero (E=0)  
+....................   
+....................    bit_set(PORTE,E);    //E=1  
+004F:  BSF    09.0
+....................    output_b(0x30);      //PORTB = 30H  
+0050:  MOVLW  00
+0051:  BSF    03.5
+0052:  MOVWF  06
+0053:  MOVLW  30
+0054:  BCF    03.5
+0055:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+0056:  BCF    09.0
+....................   
+....................    //3.  
+....................    delay_ms(5);         //Retardo de 5ms  
+0057:  MOVLW  05
+0058:  MOVWF  2F
+0059:  CALL   004
+....................   
+....................    //4.  
+....................    bit_set(PORTE,E);    //E=1  
+005A:  BSF    09.0
+....................    output_b(0x30);      //PORTB = 30H  
+005B:  MOVLW  00
+005C:  BSF    03.5
+005D:  MOVWF  06
+005E:  MOVLW  30
+005F:  BCF    03.5
+0060:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+0061:  BCF    09.0
+....................   
+....................    //5.  
+....................    delay_us(105);       //Retardo de 105us  
+0062:  MOVLW  AE
+0063:  MOVWF  77
+0064:  DECFSZ 77,F
+0065:  GOTO   064
+0066:  NOP
+0067:  NOP
+....................   
+....................    //6.  
+....................    bit_set(PORTE,E);    //E=1  
+0068:  BSF    09.0
+....................    output_b(0x30);      //PORTB = 30H  
+0069:  MOVLW  00
+006A:  BSF    03.5
+006B:  MOVWF  06
+006C:  MOVLW  30
+006D:  BCF    03.5
+006E:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+006F:  BCF    09.0
+....................   
+....................    //x.  
+....................   
+....................    //Ahora debe haber retardos de 2ms entre cada  
+....................    //cada instruccion para que puedan ser leidos  
+....................    //por la LCD.  
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+0070:  MOVLW  02
+0071:  MOVWF  2F
+0072:  CALL   004
+....................   
+....................    //7.Function Set  
+....................    bit_set(PORTE,E);    //E=1  
+0073:  BSF    09.0
+....................    output_b(0x38);      //PORTB = 38H  
+0074:  MOVLW  00
+0075:  BSF    03.5
+0076:  MOVWF  06
+0077:  MOVLW  38
+0078:  BCF    03.5
+0079:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+007A:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+007B:  MOVLW  02
+007C:  MOVWF  2F
+007D:  CALL   004
+....................   
+....................    //8.Display Off  
+....................    bit_set(PORTE,E);    //E=1  
+007E:  BSF    09.0
+....................    output_b(0x08);      //PORTB = 08H  
+007F:  MOVLW  00
+0080:  BSF    03.5
+0081:  MOVWF  06
+0082:  MOVLW  08
+0083:  BCF    03.5
+0084:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+0085:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+0086:  MOVLW  02
+0087:  MOVWF  2F
+0088:  CALL   004
+....................   
+....................    //9.Display Clear  
+....................    bit_set(PORTE,E);    //E=1  
+0089:  BSF    09.0
+....................    output_b(0x01);      //PORTB = 01H  
+008A:  MOVLW  00
+008B:  BSF    03.5
+008C:  MOVWF  06
+008D:  MOVLW  01
+008E:  BCF    03.5
+008F:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+0090:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+0091:  MOVLW  02
+0092:  MOVWF  2F
+0093:  CALL   004
+....................   
+....................    //10. Entry Mode Set  
+....................    bit_set(PORTE,E);    //E=1  
+0094:  BSF    09.0
+....................    output_b(0x06);      //PORTB = 06H  
+0095:  MOVLW  00
+0096:  BSF    03.5
+0097:  MOVWF  06
+0098:  MOVLW  06
+0099:  BCF    03.5
+009A:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+009B:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+009C:  MOVLW  02
+009D:  MOVWF  2F
+009E:  CALL   004
+....................   
+....................    //-----------------------------------//  
+....................    //Fin de la Inicializacion de la LCD  
+....................    //-----------------------------------//  
+....................   
+....................    //Enciende el display  
+....................    bit_set(PORTE,E);    //E=1  
+009F:  BSF    09.0
+....................    output_b(0x0C);      //PORTB = 0CH  
+00A0:  MOVLW  00
+00A1:  BSF    03.5
+00A2:  MOVWF  06
+00A3:  MOVLW  0C
+00A4:  BCF    03.5
+00A5:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+00A6:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+00A7:  MOVLW  02
+00A8:  MOVWF  2F
+00A9:  CALL   004
+....................   
+....................    //-----------------------------------//  
+....................    //Escribir Caracteres  
+....................    //-----------------------------------//  
+....................   
+....................   //Pociciona el cursor  
+....................   
+....................   //lIMPIAR PUERTO B  
+....................   output_b(0x00);  
+00AA:  MOVLW  00
+00AB:  BSF    03.5
+00AC:  MOVWF  06
+00AD:  BCF    03.5
+00AE:  CLRF   06
+....................   
+....................   //Modo comando  
+....................   bit_clear(PORTE,RS);  
+00AF:  BCF    09.2
+....................   bit_clear(PORTE,RW);  
+00B0:  BCF    09.1
+....................   
+....................  // Pociciona cursor  
+....................   bit_set(PORTE,E);    //E=1  
+00B1:  BSF    09.0
+....................   output_b(0xC6);       //cursor = pocicion 46 LCD  
+00B2:  BSF    03.5
+00B3:  MOVWF  06
+00B4:  MOVLW  C6
+00B5:  BCF    03.5
+00B6:  MOVWF  06
+....................   bit_clear(PORTE,E);  //E=0  
+00B7:  BCF    09.0
+....................   delay_us(50);  
+00B8:  MOVLW  53
+00B9:  MOVWF  77
+00BA:  DECFSZ 77,F
+00BB:  GOTO   0BA
+....................   
+....................   //Pasar a modo dato  
+....................    bit_set(PORTE,RS);      //RS=1  
+00BC:  BSF    09.2
+....................    bit_clear(PORTE,RW);    //RW=0  
+00BD:  BCF    09.1
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+00BE:  MOVLW  02
+00BF:  MOVWF  2F
+00C0:  CALL   004
+....................   
+....................    // CLAVE Y RETARDO  
+....................    fncEscribe('6');  
+00C1:  MOVLW  36
+00C2:  MOVWF  2E
+00C3:  CALL   017
+....................    fncEscribe('E');  
+00C4:  MOVLW  45
+00C5:  MOVWF  2E
+00C6:  CALL   017
+....................    fncEscribe(' ');  
+00C7:  MOVLW  20
+00C8:  MOVWF  2E
+00C9:  CALL   017
+....................    fncEscribe('2');  
+00CA:  MOVLW  32
+00CB:  MOVWF  2E
+00CC:  CALL   017
+....................   
+....................   
+....................  //Modo comando  
+....................   bit_clear(PORTE,RS);  
+00CD:  BCF    09.2
+....................   bit_clear(PORTE,RW);  
+00CE:  BCF    09.1
+....................   
+....................   //Retorno a Casa  
+....................   
+....................   bit_set(PORTE,E);    //E=1  
+00CF:  BSF    09.0
+....................   output_b(0x02);       //cursor = pocicion 0 LCD  
+00D0:  MOVLW  00
+00D1:  BSF    03.5
+00D2:  MOVWF  06
+00D3:  MOVLW  02
+00D4:  BCF    03.5
+00D5:  MOVWF  06
+....................   bit_clear(PORTE,E);  //E=0  
+00D6:  BCF    09.0
+....................   delay_ms(2);         //Retardo de 2ms  
+00D7:  MOVWF  2F
+00D8:  CALL   004
+....................   
+.................... //Parpadeo del cursor  
+....................    bit_set(PORTE,E);    //E=1  
+00D9:  BSF    09.0
+....................    output_b(0x0F);      //PORTB = 1111xb  
+00DA:  MOVLW  00
+00DB:  BSF    03.5
+00DC:  MOVWF  06
+00DD:  MOVLW  0F
+00DE:  BCF    03.5
+00DF:  MOVWF  06
+....................    bit_clear(PORTE,E);  //E=0  
+00E0:  BCF    09.0
+....................   
+....................    delay_ms(2);         //Retardo de 2ms  
+00E1:  MOVLW  02
+00E2:  MOVWF  2F
+00E3:  CALL   004
+....................   
+....................    while(1)  
+....................    {  
+....................    while(bit_test(PORTD,0)==1);  
+00E4:  MOVLW  00
+00E5:  BTFSC  08.0
+00E6:  MOVLW  01
+00E7:  SUBLW  01
+00E8:  BTFSC  03.2
+00E9:  GOTO   0E4
+....................       DATA11[cont++] = bit_test(PORTD,1);  
+00EA:  MOVF   20,W
+00EB:  INCF   20,F
+00EC:  ADDLW  21
+00ED:  MOVWF  04
+00EE:  MOVLW  00
+00EF:  BTFSC  08.1
+00F0:  MOVLW  01
+00F1:  MOVWF  00
+....................       while(bit_test(PORTD,0)==0);  
+00F2:  MOVLW  00
+00F3:  BTFSC  08.0
+00F4:  MOVLW  01
+00F5:  XORLW  00
+00F6:  BTFSC  03.2
+00F7:  GOTO   0F2
+....................   
+....................   
+....................       if(cont==11)  
+....................       {  
+00F8:  MOVF   20,W
+00F9:  SUBLW  0B
+00FA:  BTFSS  03.2
+00FB:  GOTO   22E
+....................          int i;  
+....................          cont=0;  
+00FC:  CLRF   20
+....................   
+....................          for(i=1;i<=8;i++)  
+00FD:  MOVLW  01
+00FE:  MOVWF  2D
+00FF:  MOVF   2D,W
+0100:  SUBLW  08
+0101:  BTFSS  03.0
+0102:  GOTO   12A
+....................          {  
+....................             if(DATA11[i]==1)  
+....................                bit_set(DATA,8-i);  
+0103:  MOVLW  21
+0104:  ADDWF  2D,W
+0105:  MOVWF  04
+0106:  DECFSZ 00,W
+0107:  GOTO   118
+0108:  MOVF   2D,W
+0109:  SUBLW  08
+010A:  MOVWF  2E
+010B:  MOVLW  01
+010C:  MOVWF  77
+010D:  MOVF   2E,W
+010E:  MOVWF  78
+010F:  BTFSC  03.2
+0110:  GOTO   115
+0111:  BCF    03.0
+0112:  RLF    77,F
+0113:  DECFSZ 78,F
+0114:  GOTO   111
+0115:  MOVF   77,W
+0116:  IORWF  2C,F
+....................             else  
+....................                bit_clear(DATA,8-i);  
+0117:  GOTO   128
+0118:  MOVF   2D,W
+0119:  SUBLW  08
+011A:  MOVWF  2E
+011B:  MOVLW  01
+011C:  MOVWF  77
+011D:  MOVF   2E,W
+011E:  MOVWF  78
+011F:  BTFSC  03.2
+0120:  GOTO   125
+0121:  BCF    03.0
+0122:  RLF    77,F
+0123:  DECFSZ 78,F
+0124:  GOTO   121
+0125:  MOVF   77,W
+0126:  XORLW  FF
+0127:  ANDWF  2C,F
+....................          }  
+0128:  INCF   2D,F
+0129:  GOTO   0FF
+....................     //Pasar a modo dato  
+....................    bit_set(PORTE,RS);      //RS=1  
+012A:  BSF    09.2
+....................    bit_clear(PORTE,RW);    //RW=0  
+012B:  BCF    09.1
+....................          delay_ms(25);         //Retardo de 2ms  
+012C:  MOVLW  19
+012D:  MOVWF  2F
+012E:  CALL   004
+....................          if(DATA!=0x0F)  {    //Si es diferente del Codigo de Liberacion de Tecla  
+012F:  MOVF   2C,W
+0130:  SUBLW  0F
+0131:  BTFSC  03.2
+0132:  GOTO   22E
+....................            // output_b(DATA);  //que SI muestre. pasae el dato a funcion que determina la letra  
+....................              switch(DATA){  
+0133:  MOVF   2C,W
+0134:  MOVWF  77
+0135:  MOVLW  38
+0136:  SUBWF  77,W
+0137:  BTFSC  03.2
+0138:  GOTO   1A6
+0139:  MOVLW  4C
+013A:  SUBWF  77,W
+013B:  BTFSC  03.2
+013C:  GOTO   1AA
+013D:  MOVLW  84
+013E:  SUBWF  77,W
+013F:  BTFSC  03.2
+0140:  GOTO   1AE
+0141:  MOVLW  C4
+0142:  SUBWF  77,W
+0143:  BTFSC  03.2
+0144:  GOTO   1B2
+0145:  MOVLW  24
+0146:  SUBWF  77,W
+0147:  BTFSC  03.2
+0148:  GOTO   1B6
+0149:  MOVLW  D4
+014A:  SUBWF  77,W
+014B:  BTFSC  03.2
+014C:  GOTO   1BA
+014D:  MOVLW  2C
+014E:  SUBWF  77,W
+014F:  BTFSC  03.2
+0150:  GOTO   1BE
+0151:  MOVLW  CC
+0152:  SUBWF  77,W
+0153:  BTFSC  03.2
+0154:  GOTO   1C2
+0155:  MOVLW  C2
+0156:  SUBWF  77,W
+0157:  BTFSC  03.2
+0158:  GOTO   1C6
+0159:  MOVLW  DC
+015A:  SUBWF  77,W
+015B:  BTFSC  03.2
+015C:  GOTO   1CA
+015D:  MOVLW  42
+015E:  SUBWF  77,W
+015F:  BTFSC  03.2
+0160:  GOTO   1CE
+0161:  MOVLW  D2
+0162:  SUBWF  77,W
+0163:  BTFSC  03.2
+0164:  GOTO   1D2
+0165:  MOVLW  5C
+0166:  SUBWF  77,W
+0167:  BTFSC  03.2
+0168:  GOTO   1D6
+0169:  MOVLW  8C
+016A:  SUBWF  77,W
+016B:  BTFSC  03.2
+016C:  GOTO   1DA
+016D:  MOVLW  22
+016E:  SUBWF  77,W
+016F:  BTFSC  03.2
+0170:  GOTO   1DE
+0171:  MOVLW  B2
+0172:  SUBWF  77,W
+0173:  BTFSC  03.2
+0174:  GOTO   1E2
+0175:  MOVLW  A8
+0176:  SUBWF  77,W
+0177:  BTFSC  03.2
+0178:  GOTO   1E6
+0179:  MOVLW  B4
+017A:  SUBWF  77,W
+017B:  BTFSC  03.2
+017C:  GOTO   1EA
+017D:  MOVLW  D8
+017E:  SUBWF  77,W
+017F:  BTFSC  03.2
+0180:  GOTO   1EE
+0181:  MOVLW  34
+0182:  SUBWF  77,W
+0183:  BTFSC  03.2
+0184:  GOTO   1F2
+0185:  MOVLW  3C
+0186:  SUBWF  77,W
+0187:  BTFSC  03.2
+0188:  GOTO   1F6
+0189:  MOVLW  54
+018A:  SUBWF  77,W
+018B:  BTFSC  03.2
+018C:  GOTO   1FA
+018D:  MOVLW  B8
+018E:  SUBWF  77,W
+018F:  BTFSC  03.2
+0190:  GOTO   1FE
+0191:  MOVLW  44
+0192:  SUBWF  77,W
+0193:  BTFSC  03.2
+0194:  GOTO   202
+0195:  MOVLW  AC
+0196:  SUBWF  77,W
+0197:  BTFSC  03.2
+0198:  GOTO   206
+0199:  MOVLW  58
+019A:  SUBWF  77,W
+019B:  BTFSC  03.2
+019C:  GOTO   20A
+019D:  MOVLW  94
+019E:  SUBWF  77,W
+019F:  BTFSC  03.2
+01A0:  GOTO   20E
+01A1:  MOVLW  0E
+01A2:  SUBWF  77,W
+01A3:  BTFSC  03.2
+01A4:  GOTO   212
+01A5:  GOTO   22A
+....................                case 0x38:  
+....................                   fncEscribe('A');  
+01A6:  MOVLW  41
+01A7:  MOVWF  2E
+01A8:  CALL   017
+....................                break;  
+01A9:  GOTO   22E
+....................   
+....................                case 0x4C:  
+....................                   fncEscribe('B');  
+01AA:  MOVLW  42
+01AB:  MOVWF  2E
+01AC:  CALL   017
+....................                break;  
+01AD:  GOTO   22E
+....................   
+....................                case 0x84:  
+....................                   fncEscribe('C');  
+01AE:  MOVLW  43
+01AF:  MOVWF  2E
+01B0:  CALL   017
+....................                break;  
+01B1:  GOTO   22E
+....................   
+....................                case 0xC4:  
+....................                   fncEscribe('D');  
+01B2:  MOVLW  44
+01B3:  MOVWF  2E
+01B4:  CALL   017
+....................                break;  
+01B5:  GOTO   22E
+....................   
+....................                case 0x24:  
+....................                   fncEscribe('E');  
+01B6:  MOVLW  45
+01B7:  MOVWF  2E
+01B8:  CALL   017
+....................                break;  
+01B9:  GOTO   22E
+....................   
+....................                case 0xD4:  
+....................                   fncEscribe('F');  
+01BA:  MOVLW  46
+01BB:  MOVWF  2E
+01BC:  CALL   017
+....................                break;  
+01BD:  GOTO   22E
+....................   
+....................                case 0x2C:  
+....................                   fncEscribe('G');  
+01BE:  MOVLW  47
+01BF:  MOVWF  2E
+01C0:  CALL   017
+....................                break;  
+01C1:  GOTO   22E
+....................   
+....................                case 0xCC:  
+....................                   fncEscribe('H');  
+01C2:  MOVLW  48
+01C3:  MOVWF  2E
+01C4:  CALL   017
+....................                break;  
+01C5:  GOTO   22E
+....................   
+....................                case 0xC2:  
+....................                   fncEscribe('I');  
+01C6:  MOVLW  49
+01C7:  MOVWF  2E
+01C8:  CALL   017
+....................                break;  
+01C9:  GOTO   22E
+....................   
+....................                case 0xDC:  
+....................                   fncEscribe('J');  
+01CA:  MOVLW  4A
+01CB:  MOVWF  2E
+01CC:  CALL   017
+....................                break;  
+01CD:  GOTO   22E
+....................   
+....................                case 0x42:  
+....................                   fncEscribe('K');  
+01CE:  MOVLW  4B
+01CF:  MOVWF  2E
+01D0:  CALL   017
+....................                break;  
+01D1:  GOTO   22E
+....................   
+....................                case 0xD2:  
+....................                   fncEscribe('L');  
+01D2:  MOVLW  4C
+01D3:  MOVWF  2E
+01D4:  CALL   017
+....................                break;  
+01D5:  GOTO   22E
+....................   
+....................                case 0x5C:  
+....................                   fncEscribe('M');  
+01D6:  MOVLW  4D
+01D7:  MOVWF  2E
+01D8:  CALL   017
+....................                break;  
+01D9:  GOTO   22E
+....................   
+....................                case 0x8C:  
+....................                   fncEscribe('N');  
+01DA:  MOVLW  4E
+01DB:  MOVWF  2E
+01DC:  CALL   017
+....................                break;  
+01DD:  GOTO   22E
+....................   
+....................                case 0x22:  
+....................                   fncEscribe('O');  
+01DE:  MOVLW  4F
+01DF:  MOVWF  2E
+01E0:  CALL   017
+....................                break;  
+01E1:  GOTO   22E
+....................   
+....................                case 0xB2:  
+....................                   fncEscribe('P');  
+01E2:  MOVLW  50
+01E3:  MOVWF  2E
+01E4:  CALL   017
+....................                break;  
+01E5:  GOTO   22E
+....................   
+....................                case 0xA8:  
+....................                   fncEscribe('Q');  
+01E6:  MOVLW  51
+01E7:  MOVWF  2E
+01E8:  CALL   017
+....................                break;  
+01E9:  GOTO   22E
+....................   
+....................                case 0xB4:  
+....................                   fncEscribe('R');  
+01EA:  MOVLW  52
+01EB:  MOVWF  2E
+01EC:  CALL   017
+....................                break;  
+01ED:  GOTO   22E
+....................   
+....................                case 0xD8:  
+....................                   fncEscribe('S');  
+01EE:  MOVLW  53
+01EF:  MOVWF  2E
+01F0:  CALL   017
+....................                break;  
+01F1:  GOTO   22E
+....................   
+....................                case 0x34:  
+....................                   fncEscribe('T');  
+01F2:  MOVLW  54
+01F3:  MOVWF  2E
+01F4:  CALL   017
+....................                break;  
+01F5:  GOTO   22E
+....................   
+....................                case 0X3C:  
+....................                   fncEscribe('U');  
+01F6:  MOVLW  55
+01F7:  MOVWF  2E
+01F8:  CALL   017
+....................                break;  
+01F9:  GOTO   22E
+....................   
+....................                case 0x54:  
+....................                   fncEscribe('V');  
+01FA:  MOVLW  56
+01FB:  MOVWF  2E
+01FC:  CALL   017
+....................                break;  
+01FD:  GOTO   22E
+....................   
+....................                case 0xB8:  
+....................                   fncEscribe('W');  
+01FE:  MOVLW  57
+01FF:  MOVWF  2E
+0200:  CALL   017
+....................                break;  
+0201:  GOTO   22E
+....................   
+....................                case 0x44:  
+....................                   fncEscribe('X');  
+0202:  MOVLW  58
+0203:  MOVWF  2E
+0204:  CALL   017
+....................                break;  
+0205:  GOTO   22E
+....................   
+....................                case 0xAC:  
+....................                   fncEscribe('Y');  
+0206:  MOVLW  59
+0207:  MOVWF  2E
+0208:  CALL   017
+....................                break;  
+0209:  GOTO   22E
+....................   
+....................                case 0x58:  
+....................                   fncEscribe('Z');  
+020A:  MOVLW  5A
+020B:  MOVWF  2E
+020C:  CALL   017
+....................                break;  
+020D:  GOTO   22E
+....................   
+....................                case 0x94:  
+....................                   fncEscribe(' ');  
+020E:  MOVLW  20
+020F:  MOVWF  2E
+0210:  CALL   017
+....................                break;  
+0211:  GOTO   22E
+....................   
+....................                case 0x0E:  
+....................                {  
+....................                   bit_clear(PORTE,RS);  
+0212:  BCF    09.2
+....................                   bit_clear(PORTE,RW);  
+0213:  BCF    09.1
+....................                  
+....................                   bit_set(PORTE,E);    //E=1  
+0214:  BSF    09.0
+....................                   output_b(0x02);      //cursor = pocicion 0 LCD  
+0215:  MOVLW  00
+0216:  BSF    03.5
+0217:  MOVWF  06
+0218:  MOVLW  02
+0219:  BCF    03.5
+021A:  MOVWF  06
+....................                   bit_clear(PORTE,E);  //E=0  
+021B:  BCF    09.0
+....................                   delay_ms(2);         //Retardo de 2ms  
+021C:  MOVWF  2F
+021D:  CALL   004
+....................               
+....................                   bit_set(PORTE,E);    //E=1  
+021E:  BSF    09.0
+....................                   output_b(0x0F);      //PORTB = 1111xb  
+021F:  MOVLW  00
+0220:  BSF    03.5
+0221:  MOVWF  06
+0222:  MOVLW  0F
+0223:  BCF    03.5
+0224:  MOVWF  06
+....................                   bit_clear(PORTE,E);  //E=0  
+0225:  BCF    09.0
+....................                  
+....................                   delay_ms(2);         //Retardo de 2ms  
+0226:  MOVLW  02
+0227:  MOVWF  2F
+0228:  CALL   004
+....................   
+....................                }  
+....................                break;  
+0229:  GOTO   22E
+....................                     
+....................                 default:  
+....................                   fncEscribe('??);  
+022A:  MOVLW  3F
+022B:  MOVWF  2E
+022C:  CALL   017
+....................                 break;  
+022D:  GOTO   22E
+....................   
+....................              }  
+....................          }  
+....................       }  
+....................    }//while  
+022E:  GOTO   0E4
+.................... }//main  
+....................   
+.................... //Funcion que escribe un caracter en la LCD  
+.................... void fncEscribe(char car)  
+.................... {  
+022F:  SLEEP
+....................       bit_set(PORTE,E);    //E=1  
+*
+0017:  BSF    09.0
+....................       output_b(car);       //PORTB = car  
+0018:  MOVLW  00
+0019:  BSF    03.5
+001A:  MOVWF  06
+001B:  BCF    03.5
+001C:  MOVF   2E,W
+001D:  MOVWF  06
+....................       bit_clear(PORTE,E);  //E=0  
+001E:  BCF    09.0
+....................       delay_us(50);  
+001F:  MOVLW  53
+0020:  MOVWF  77
+0021:  DECFSZ 77,F
+0022:  GOTO   021
+.................... }  
+0023:  RETLW  00
+....................   
+....................  
+
+Configuration Fuses:
+   Word  1: 3FFE   HS WDT NOPUT NOPROTECT BROWNOUT LVP NOCPD NOWRT NODEBUG
