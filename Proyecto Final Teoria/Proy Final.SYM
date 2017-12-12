@@ -1,0 +1,86 @@
+006     PORTB
+008     PSP_DATA
+008     PORTD
+009     PORTE
+015     CCP_1_LOW
+015-016 CCP_1
+016     CCP_1_HIGH
+01B     CCP_2_LOW
+01B-01C CCP_2
+01C     CCP_2_HIGH
+020     strtok.save
+021     i
+022     cont
+023-02D DATA11
+02E     DATA
+02F-03F cadena
+040     i
+041     fncRecibeC.car
+041     fnComparaC.str
+041     fnLimpCad.j
+041     main.@SCRATCH
+042-04D fnComparaC.c1
+042     @delay_ms1.P1
+042     main.@SCRATCH
+042     fnLimpCad.@SCRATCH
+042     fncRecibeC.@SCRATCH
+04E-058 fnComparaC.c2
+059-064 fnComparaC.c3
+065-070 fnComparaC.c4
+071     fnComparaC.@SCRATCH
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+07B     @SCRATCH
+086     TRISB
+088     TRISD
+0A0-0AA fnComparaC.c5
+0AB-0B6 fnComparaC.c6
+0B7-0BF fnComparaC.c7
+0C0-0C9 fnComparaC.c8
+0CA-0E9 m8
+0EA     fncCadena.caracter
+0EA     strcmp.s1
+0EB     strcmp.s2
+0EB     fncCadena.x
+0EC     strcmp.@SCRATCH
+0EC     fncCadena.@SCRATCH
+0ED     fncEscribe.car
+
+0059  strcmp
+0004  @delay_ms1
+1F00  loader16F877
+0813  main
+0082  fnComparaC
+003B  fnLimpCad
+0017  fncEscribe
+0024  fncRecibeC
+004C  fncClear
+0786  fncCadena
+07EA  RecorDispDer
+0813  @cinit
+
+Project Files:
+    D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.c
+    C:\Program Files (x86)\PICC\devices\16f877.h
+    C:\Program Files (x86)\PICC\drivers\string.h
+    C:\Program Files (x86)\PICC\drivers\stddef.h
+    C:\Program Files (x86)\PICC\drivers\ctype.h
+
+Compiler Settings:
+    Processor:      PIC16F877
+    Pointer Size:   8
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: 1,8,16
+
+Output Files:
+    Errors:      D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.err
+    INHX8:       D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.HEX
+    Symbols:     D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.SYM
+    List:        D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.LST
+    Debug/COFF:  D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.cof
+    Call Tree:   D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.tre
+    Statistics:  D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.sta

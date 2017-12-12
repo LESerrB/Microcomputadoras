@@ -1,0 +1,42 @@
+
+ROM used: 2802 (34%)
+          2048 (25%) including unused fragments
+
+          2 Average locations per line
+          4 Average locations per statement
+
+RAM used: 39 (22%) at main() level
+          173 (99%) worst case
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+  818   527  81  D:\Microcomputadoras\Proyecto Final Teoria\Proy Final.c
+  259     0   0  C:\Program Files (x86)\PICC\devices\16f877.h
+  423   127  11  C:\Program Files (x86)\PICC\drivers\string.h
+   28     0   0  C:\Program Files (x86)\PICC\drivers\stddef.h
+   28     0   0  C:\Program Files (x86)\PICC\drivers\ctype.h
+----- -----
+ 3112  1308 Total
+
+Page ROM  %  RAM  Functions:
+---- --- --- ---  ----------
+0     41   1   3  strcmp
+0     19   1   1  @delay_ms1
+3      1   0   0  loader16F877
+1    736  26   2  main
+0   1916  68  91  fnComparaC
+0     17   1   2  fnLimpCad
+0     13   0   1  fncEscribe
+0     23   1   2  fncRecibeC
+0     13   0   0  fncClear
+1     19   1   0  RecorDispDer
+
+ Segment   Used  Free
+---------  ----  ----
+00000-00003     4  0
+00004-007FF  2042  2
+00800-00FFF   755  1293
+01000-017FF     0  2048
+01800-01EFF     0  1792
+01F00-01FFF     1  255
+
