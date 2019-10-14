@@ -1,2 +1,2 @@
 # Practicas Laboratorio y Teoría
-Practicas para pic
+Practicas para pic16f887
